@@ -3,8 +3,9 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h> 
 #include "../include/structure.h"
-
+#include <bits/getopt_core.h>
 
 void directoryTour(char *DirectoryName) {
     struct dirent *input;
@@ -39,8 +40,31 @@ void directoryTour(char *DirectoryName) {
     closedir(directory);
 }
 
-int main(int argc, char const *argv[])
-{
-    printf("Hello world\n");
+int main(int argc, char *argv[]){
+    int opt;
+    int numThreads;
+    char* initDir;
+    char funcMode;
+
+    while((opt = getopt(argc, argv, "t:d:m:")) != -1) {
+        switch (opt) {
+            case 't': // Argumento numero de threads
+                numThreads = atoi(optarg);
+                // printf("numThreads: %d\n", numThreads);
+                break;
+            case 'd': // Argumento directorio de inicio (absoluta o relativa)
+                initDir = optarg;
+                // printf("initDir: %s\n", initDir);
+                break;
+            case 'm': // Argumento modo 
+                funcMode = *optarg;
+                // printf("funcMode: %c\n", funcMode);
+                break;
+            default:
+                return 1;
+        }
+        
+    }
+    
     return 0;
 }
