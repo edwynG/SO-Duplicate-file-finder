@@ -4,8 +4,12 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h> 
-#include "../include/structure.h"
 #include <bits/getopt_core.h>
+#include "../include/structure.h"
+
+int numThreads;
+char* initDir;
+char funcMode;
 
 void directoryTour(char *DirectoryName) {
     struct dirent *input;
@@ -40,11 +44,8 @@ void directoryTour(char *DirectoryName) {
     closedir(directory);
 }
 
-int main(int argc, char *argv[]){
+void getArguments(int argc, char *argv[]){
     int opt;
-    int numThreads;
-    char* initDir;
-    char funcMode;
 
     while((opt = getopt(argc, argv, "t:d:m:")) != -1) {
         switch (opt) {
@@ -61,10 +62,12 @@ int main(int argc, char *argv[]){
                 // printf("funcMode: %c\n", funcMode);
                 break;
             default:
-                return 1;
+                //
         }
-        
     }
-    
+}
+
+int main(int argc, char *argv[]){
+    getArguments(argc, argv);
     return 0;
 }
