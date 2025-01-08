@@ -1,0 +1,11 @@
+*.pdf
+*.zip
+*.tar
+documents
+*.o
+.txt
+obj
+bin
+*.gch
+.vscode
+output
