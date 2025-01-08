@@ -6,6 +6,7 @@
 #include <unistd.h> 
 #include <bits/getopt_core.h>
 #include "../include/structure.h"
+#include "../include/comparation.h"
 
 int numThreads;
 char* initDir;
