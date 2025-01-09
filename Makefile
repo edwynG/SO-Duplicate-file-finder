@@ -1,12 +1,26 @@
-all: prepare main
+SRCDIR = src
+OBJDIR = obj
+BINDIR = bin
+MD5LIBRARYDIR = resources/md5-lib/libmd5.a
+FILE = main
+T = 0
+D = string
+M = e
+
+all: prepare $(BINDIR)/$(FILE)
+
+clean:
+	rm -rf $(OBJDIR) $(BINDIR)
 
 prepare:
-	mkdir -p obj 
+	mkdir -p $(OBJDIR) $(BINDIR)
 
-clean:	
-	rm -rf obj/*
+$(BINDIR)/$(FILE): $(OBJDIR)/$(FILE).o
+	gcc -o $@ $< $(MD5LIBRARYDIR)
+	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
-main: src/main.c
-	gcc src/main.c -o obj/main resources/md5-lib/libmd5.a
-	./obj/main -t 0 -d string -m c
-# -t int -d string -m char
+$(OBJDIR)/$(FILE).o: $(SRCDIR)/$(FILE).c
+	gcc -c -o $@ $<
+
+# Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
+# Ejecutar: ./main -t int -d string -m char

@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-// Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
-// Ejecutar: ./main -t int -d string -m char
 
 // Calcular el hash MD5 de los contenidos del archivo
+
 int MDFile(char* filename, char hashValue[33]);
 
 int hashComparation(char funcMode, char* file1, char* file2){
@@ -35,7 +34,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
         if(child1 == 0){ // Proceso child1
             close(pipe1[0]); 
             dup2(pipe1[1], STDOUT_FILENO); // Redirigir consola al pipe
-            execlp("../resources/md5-app/md5", "../resources/md5-app/md5", file1, (char *)NULL);
+            execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char *)NULL);
             
             perror("execlp");
             exit(1);
@@ -56,7 +55,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
             if(child2 == 0){ // Proceso child2
                 close(pipe2[0]); 
                 dup2(pipe2[1], STDOUT_FILENO); // Redirigir consola al pipe
-                execlp("../resources/md5-app/md5", "../resources/md5-app/md5", file2, (char *)NULL);
+                execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char *)NULL);
                 
                 perror("execlp");
                 exit(1);
@@ -84,7 +83,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
     }else if(funcMode == 'l'){ // Modo biblioteca (md5-lib)
         // 1) Invocar el comando make y obtener el archivo de biblioteca estática (libmd5.a)
         // 2) Enlazar la librería estática (archivo de extensión .a) al proyecto
-        // 2) Usar la función int MDFile(char* filename, char hashValue[33);
+        // 2) Usar la función int MDFile(char* filename, char hashValue[33});
         // filename nombre del archivo
         // hashValue almacena el hash
         // Valor retorno: 1 o 0 si hubo un error
