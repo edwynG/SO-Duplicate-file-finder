@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-// #include "../resources/md5-lib/libmd5.a"
+// Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
+// Ejecutar: ./main -t int -d string -m char
 
 // Calcular el hash MD5 de los contenidos del archivo
+int MDFile(char* filename, char hashValue[33]);
 
 int hashComparation(char funcMode, char* file1, char* file2){
     int equal = 0;
@@ -80,20 +82,21 @@ int hashComparation(char funcMode, char* file1, char* file2){
             }
         }
     }else if(funcMode == 'l'){ // Modo biblioteca (md5-lib)
-        // // 1) Invocar el comando make y obtener el archivo de biblioteca estática (libmd5.a)
-        // // 2) Enlazar la librería estática (archivo de extensión .a) al proyecto
-        // // 2) Usar la función int MDFile(char* filename, char hashValue[33);
-        // // filename nombre del archivo
-        // // hashValue almacena el hash
-        // // Valor retorno: 1 o 0 si hubo un error
-        // char hash1[33], hash2[33];
-        // if(MDFile(file1, hash1) && MDFile(file2, hash2)){
-        //     if(strcmp(hash1, hash2) == 0){ // Comparar hashes
-        //         equal = 1;
-        //     }
-        // }else{
-        //     return equal;
-        // }
+        // 1) Invocar el comando make y obtener el archivo de biblioteca estática (libmd5.a)
+        // 2) Enlazar la librería estática (archivo de extensión .a) al proyecto
+        // 2) Usar la función int MDFile(char* filename, char hashValue[33);
+        // filename nombre del archivo
+        // hashValue almacena el hash
+        // Valor retorno: 1 o 0 si hubo un error
+        char hash1[33];
+        char hash2[33];
+        if(MDFile(file1, hash1) && MDFile(file2, hash2)){
+            if(strcmp(hash1, hash2) == 0){ // Comparar hashes
+                equal = 1;
+            }
+        }else{
+            return equal;
+        }
     }
     printf("equal %d\n", equal);
     return equal;
