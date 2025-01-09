@@ -1,18 +1,12 @@
-
-all: prepare bin/program
+all: prepare main
 
 prepare:
-	@echo "Preparando el entorno..."
-	mkdir -p bin obj 
+	mkdir -p obj 
 
-bin/program:
-	@echo "Build proyect"
+clean:	
+	rm -rf obj/*
 
-execute:
-	mkdir -p output 
-	gcc src/main.c -o output/program 
-	./output/program 
-	rm -rf output || true
-clean:
-	rm -rf bin obj 
-
+main: src/main.c
+	gcc src/main.c -o obj/main resources/md5-lib/libmd5.a
+	./obj/main -t 0 -d string -m c
+# -t int -d string -m char
