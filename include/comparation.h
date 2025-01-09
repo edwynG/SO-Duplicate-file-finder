@@ -91,11 +91,11 @@ int hashComparation(char funcMode, char* file1, char* file2){
         char hash1[33];
         char hash2[33];
         if(MDFile(file1, hash1) && MDFile(file2, hash2)){
+            printf("hash1 %s\n", hash1);
+            printf("hash2 %s\n", hash2);
             if(strcmp(hash1, hash2) == 0){ // Comparar hashes
                 equal = 1;
             }
-        }else{
-            return equal;
         }
     }
     printf("equal %d\n", equal);
