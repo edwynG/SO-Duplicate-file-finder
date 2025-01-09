@@ -70,5 +70,6 @@ void getArguments(int argc, char *argv[]){
 
 int main(int argc, char *argv[]){
     getArguments(argc, argv);
+    // hashComparation(funcMode, "archivo1.txt", "archivo2.txt");
     return 0;
 }
