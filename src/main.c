@@ -20,7 +20,6 @@ void *startSearchDuplicates()
 //* Imprime el resultado del analisis del escritorio
 void printFormat(void *data)
 {
-    
 }
 
 void getArguments(int argc, char *argv[])
@@ -50,7 +49,7 @@ void getArguments(int argc, char *argv[])
     }
 }
 
-//? ¿Sera que hoy se acaba venezuela dios mio? xd
+// ¿Sera que hoy se acaba venezuela dios mio? xd
 int main(int argc, char *argv[])
 {
     getArguments(argc, argv);
