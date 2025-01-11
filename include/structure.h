@@ -1,8 +1,0 @@
-
-struct ToVisit{
-
-};
-
-struct Visited{
-
-};

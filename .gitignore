@@ -3,7 +3,7 @@
 *.tar
 documents
 *.o
-.txt
+*.txt
 obj
 bin
 *.gch
