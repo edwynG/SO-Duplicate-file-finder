@@ -42,7 +42,7 @@ execute: $(BINDIR)/$(FILE)
 
 ##! CONSTRUCCIÖN Y PRUEBAS DESDE EL MAKEFILE
 #* Compilar: make
-#* Ejecutar: make execute T=z D=y M=z
+#* Compilar y ejecutar: make execute T=z D=y M=z
 # T = Número de hilos
 # D = Directorio
 # M = Modo 
