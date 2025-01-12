@@ -2,6 +2,7 @@
 #include <bits/getopt_core.h>
 #include "../include/comparation.h"
 #include "../include/utils.h"
+#include "../include/dataStructures.h"
 
 int numThreads;
 char *initDir;
@@ -49,7 +50,9 @@ void getArguments(int argc, char *argv[])
     }
 }
 
-// ¿Sera que hoy se acaba venezuela dios mio? xd
+// ¿Sera que hoy se acaba venezuela dios mio? xd 
+// Ok ya paso un dia desde el comentario de arriba, venezuela no se acabo
+//! Estado: Destruido, demacrado,vuelto nada, papelón...
 int main(int argc, char *argv[])
 {
     getArguments(argc, argv);

@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include "../include/utils.h"
+#include "../include/dataStructures.h"
 
 char *getFileName(const char *path)
 {
@@ -31,18 +32,18 @@ char *getFileName(const char *path)
     }
 }
 
-//! AUN FALTA TERMINAR DE IMPLEMENTAR
-struct List* directoryTour(char *DirectoryName)
+struct List *directoryTour(char *DirectoryName)
 {
+    if (strcmp(DirectoryName, ".") || strcmp(DirectoryName, ".."))
+        return NULL;
+
     struct dirent *input;
     DIR *directory = opendir(DirectoryName);
-
+    // Verifica que se aun directorio
     if (directory == NULL)
-    {
-        perror("No se puede abrir el directory");
-        return NULL;
-    }
+        return NULL; // Si no lo es retorna NULL
 
+    struct List *toVisite = createList();
     while ((input = readdir(directory)) != NULL)
     {
         // Ignorar los directorys "." y ".."
@@ -58,8 +59,9 @@ struct List* directoryTour(char *DirectoryName)
                 // Ignorar enlaces simbólicos
                 if (!S_ISLNK(info.st_mode))
                 {
-                    printf("%s\n", pathComplet);
+                    toVisite->addNode(toVisite, pathComplet);
                     // // Si es un directory, llamar recursivamente
+                    ////* implementación antigua..
                     // if (S_ISDIR(info.st_mode))
                     // {
                     //     directoryTour(pathComplet);
@@ -70,5 +72,5 @@ struct List* directoryTour(char *DirectoryName)
     }
 
     closedir(directory);
-    return NULL;
+    return toVisite;
 }

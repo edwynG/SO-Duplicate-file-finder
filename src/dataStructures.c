@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../include/dataStructures.h"
 
-//TODO - Implementación de structure.h
+// TODO - Implementación de structure.h
 //* Para más detalle vea el archivo dataStructures.h
 
 int isEmpty(struct List *list)
@@ -95,6 +95,24 @@ struct Node *getTail(struct List *list)
     return list->tail;
 };
 
+int moveNodeToMy(struct List *me, struct List *from)
+{
+    if (me == NULL || from == NULL)
+    {
+        return 0;
+    }
+
+    struct Node *nodeTail = from->getHead(from);
+    while (nodeTail != NULL)
+    {
+        me->addNode(me, nodeTail);
+        nodeTail = nodeTail->next;
+    }
+    from->head=NULL;
+    from->tail=NULL;
+    return 1;
+}
+
 struct List *createList() //! USAR SI SE DESEA CREAR UNA LISTA
 {
     struct List *list = (struct List *)malloc(sizeof(struct List));
@@ -103,6 +121,7 @@ struct List *createList() //! USAR SI SE DESEA CREAR UNA LISTA
     list->getHead = getHead;
     list->getTail = getTail;
     list->isEmpty = isEmpty;
+    list->moveNodeToMy = moveNodeToMy;
     list->head = NULL;
     list->tail = NULL;
     return list;
