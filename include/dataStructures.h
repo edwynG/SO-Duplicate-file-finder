@@ -42,11 +42,22 @@ struct List
 
 //* Metodos
 
+// verifica si la lista esta vacia
 int isEmpty(struct List *list);
+
+// remueve elementos de la lista
 int removeNode(struct List *list, struct Node *node);
+
+// Libera la memoria reservada por la lista
 void destructor(struct List *list);
+
+// Obtener cabecera de la lista
 struct Node *getHead(struct List *list);
+
+// Obtener cola de la lista
 struct Node *getTail(struct List *list);
+
+// Añadir elementos a la lista
 int addNode(struct List *list, void *value);
 
 //* metodo para mover nodos de otra listas a la lista propia.
@@ -55,11 +66,25 @@ int addNode(struct List *list, void *value);
 // @return int (0 o 1)
 int moveNodeToMy(struct List *me, struct List *from);
 
-
 //! Función para crear una lista
 // Esta función tiene el proposito de crear instancias de la estructura List
 // @return List*
 struct List *createList(); //! USAR SI SE DESEA CREAR UNA LISTA
 
+// Estructura para archivos duplicados
+struct FilesDuplicates
+{
+    char *file;
+    //! Lista para llevar registro de los archivos duplicados
+    struct List *duplicates; //* (char*)
+};
+
+// Estructura para la estadistica
+struct FileStatistics
+{
+    int numberDuplicate;
+    //! Lista de Archivos duplicados
+    struct List *Files; //* FilesDuplicates*
+};
 
 #endif

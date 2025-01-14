@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../include/dataStructures.h"
 
-// TODO - Implementación de structure.h
+//TODO - Implementación de structure.h
 //* Para más detalle vea el archivo dataStructures.h
 
 int isEmpty(struct List *list)

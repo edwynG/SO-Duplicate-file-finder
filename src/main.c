@@ -3,6 +3,8 @@
 #include "../include/comparation.h"
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
+#include "../include/concurrentFileMd5.h"
+#include <pthread.h>
 
 int numThreads;
 char *initDir;
@@ -11,16 +13,34 @@ char funcMode;
 //* Logica principal del programa - diseño por definir
 //! Función importante!!
 //* @return undefined por los momentos indefinido
-void *startSearchDuplicates()
+struct DirectoryData *startSearchDuplicates()
 {
-    // se crean los hilos..
-    printf("Hello world!!\n");
-    return NULL;
-}
 
-//* Imprime el resultado del analisis del escritorio
-void printFormat(void *data)
-{
+    if (numThreads < 1 || initDir == NULL || funcMode == '\0')
+    {
+        return NULL;
+    }
+
+    pthread_t *pthreads = (pthread_t *)malloc(sizeof(int) * numThreads);
+    struct DirectoryData *directoryData = initStructDirectoryData(funcMode, initDir);
+    if (directoryData == NULL)
+        return NULL;
+
+    // inicializa semaforos
+    initSemFile();
+
+    // se crean los hilos..
+    for (int i = 0; i < numThreads; i++)
+    {
+        pthread_create(&pthreads[i], NULL, searchFileDuplicates, directoryData);
+    }
+
+    for (int i = 0; i < numThreads; i++)
+    {
+        pthread_join(pthreads[i], NULL);
+    }
+
+    return directoryData;
 }
 
 void getArguments(int argc, char *argv[])
@@ -50,13 +70,20 @@ void getArguments(int argc, char *argv[])
     }
 }
 
-// ¿Sera que hoy se acaba venezuela dios mio? xd 
+// ¿Sera que hoy se acaba venezuela dios mio? xd
 // Ok ya paso un dia desde el comentario de arriba, venezuela no se acabo
 //! Estado: Destruido, demacrado,vuelto nada, papelón...
 int main(int argc, char *argv[])
 {
     getArguments(argc, argv);
-    void *result = startSearchDuplicates();
-    printFormat(result);
+    struct DirectoryData *result = startSearchDuplicates();
+    if (result == NULL)
+    {
+        //* Mensaje de error temporal, no se si haya que ponerlos xd.
+        printf("Argumentos inconrrectos\n");
+        return 1;
+    }
+
+    printFormatFileDuplicates(result);
     return 0;
 }

@@ -6,7 +6,11 @@
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
 
-char *getFileName(const char *path)
+//TODO - Implementación de utils.h
+//* Para más detalle vea el archivo utils.h
+
+
+char *getFileName(char *path)
 {
     //* Busca la última aparición de '/' o '\' en la ruta
     const char *lastSlash = strrchr(path, '/');

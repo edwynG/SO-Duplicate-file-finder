@@ -2,7 +2,7 @@ SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
 
-CFLAGS = -Wall -I ./include  # Agrega el directorio de las cabeceras
+CFLAGS = -Wall -lpthread -I ./include  # Agrega el directorio de las cabeceras
 SOURCE = $(wildcard $(SRCDIR)/*.c) # Lista de achivos fuentes
 OBJ = $(SOURCE:$(SRCDIR)/%.c=$(OBJDIR)/%.o) # Aplica un map en SOURCE y crea archivos objetos
 
@@ -28,7 +28,7 @@ prepare:
 
 
 $(BINDIR)/$(FILE): $(OBJ)
-	gcc -o $@ $^ $(MD5LIBRARYDIR)
+	gcc $(CFLAGS) -o $@ $^ $(MD5LIBRARYDIR)
 	
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	gcc $(CFLAGS) -c $< -o $@
