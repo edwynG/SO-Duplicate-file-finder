@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include <bits/getopt_core.h>
+#include <pthread.h>
 #include "../include/hashComparation.h"
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
 #include "../include/concurrentFile.h"
-#include <pthread.h>
 
 int numThreads;
-char *initDir;
+char* initDir;
 char funcMode;
 
-//* Logica principal del programa - diseño por definir
-//! Función importante!!
-//* @return undefined por los momentos indefinido
+// Logica principal del programa
+// @return undefined por los momentos
 struct DirectoryData *startSearchDuplicates()
 {
 
@@ -43,6 +42,9 @@ struct DirectoryData *startSearchDuplicates()
     return directoryData;
 }
 
+// Obtiene los argumentos pasados al ejecutar y los guarda en numThreads, initDir, funcMode
+// @param argc
+// @param argv
 void getArguments(int argc, char *argv[])
 {
     int opt;
@@ -70,16 +72,14 @@ void getArguments(int argc, char *argv[])
     }
 }
 
-// ¿Sera que hoy se acaba venezuela dios mio? xd
-// Ok ya paso un dia desde el comentario de arriba, venezuela no se acabo
-//! Estado: Destruido, demacrado,vuelto nada, papelón...
 int main(int argc, char *argv[])
 {
     getArguments(argc, argv);
+
     struct DirectoryData *result = startSearchDuplicates();
     if (result == NULL)
     {
-        //* Mensaje de error temporal, no se si haya que ponerlos xd.
+        // Mensaje de error temporal, no se si haya que ponerlos xd.
         printf("Argumentos inconrrectos\n");
         return 1;
     }

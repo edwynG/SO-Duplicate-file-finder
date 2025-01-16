@@ -13,29 +13,29 @@ struct Node
 // Estructura para crear lista de diferentes tipos de datos
 struct List
 {
-    //* puntero al primer nodo
+    // Puntero al primer nodo
     struct Node *head;
     struct Node *tail;
 
-    //* Remueve un elemento
+    // Remueve un elemento
     int (*removeNode)(struct List *, struct Node *);
 
-    //* Obtiene el primer elemento
+    // Obtiene el primer elemento
     struct Node *(*getHead)(struct List *);
 
-    //* Obtiene el ultimo elemento
+    // Obtiene el ultimo elemento
     struct Node *(*getTail)(struct List *);
 
-    //* Verifica si esta vacia la lista
+    // Verifica si esta vacia la lista
     int (*isEmpty)(struct List *);
 
-    //* Destructor para liberar memoria
+    // Destructor para liberar memoria
     void (*destructor)(struct List *);
 
-    //* Añade un elemento al la lista
+    // Añade un elemento al la lista
     int (*addNode)(struct List *, void *);
 
-    //* Añade elementos de otra lista y los elimina de ella
+    // Añade elementos de otra lista y los elimina de ella
     int (*moveNodeToMine)(struct List *, struct List *);
 };
 

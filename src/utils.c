@@ -62,8 +62,8 @@ struct List *directoryTour(char *DirectoryName)
                 if (!S_ISLNK(info.st_mode))
                 {
                     toVisite->addNode(toVisite, pathComplet);
-                    // // Si es un directory, llamar recursivamente
-                    ////* implementación antigua..
+                    // Si es un directory, llamar recursivamente
+                    // Implementación antigua..
                     // if (S_ISDIR(info.st_mode))
                     // {
                     //     directoryTour(pathComplet);

@@ -50,12 +50,12 @@ void printFormatFileDuplicates(struct DirectoryData *data)
         struct FilesDuplicates *headFileValue = (struct FilesDuplicates *)headFiles->value;
         char *nameFile = getFileName(headFileValue->file);
 
-        //* Toma la cabecera de la lista de duplicados del archivos
+        // Toma la cabecera de la lista de duplicados del archivos
         struct Node *headDuplicates = (struct Node *)headFileValue->duplicates->getHead(headFileValue->duplicates);
 
         while (headDuplicates != NULL)
         {
-            //* Obtiene el valor del nodo de la lista de duplicados del archivo
+            // Obtiene el valor del nodo de la lista de duplicados del archivo
             char *nameDuplicate = getFileName((char *)headDuplicates->value);
             printf("%s es duplicado de %s\n", nameDuplicate, nameFile);
             headDuplicates = headDuplicates->next;
