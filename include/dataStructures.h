@@ -1,4 +1,4 @@
-/// Evita que dataStructure se cargue mas de una vez durante el preprocesamiento
+/// Evita que dataStructure se cargue más de una vez durante el preprocesamiento
 #ifndef DATA_STRUCTURE
 #define DATA_STRUCTURE
 

@@ -6,13 +6,11 @@
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
 
-//TODO - Implementación de utils.h
-//* Para más detalle vea el archivo utils.h
-
+// Implementación de utils.h para más detalle vea dicho archivo
 
 char *getFileName(char *path)
 {
-    //* Busca la última aparición de '/' o '\' en la ruta
+    // Busca la última aparición de '/' o '\' en la ruta
     const char *lastSlash = strrchr(path, '/');
     const char *lastBackslash = strrchr(path, '\\');
 
@@ -31,7 +29,7 @@ char *getFileName(char *path)
     }
     else
     {
-        // Comapara que resultado tiene mas caracteres y lo retorna
+        // Comapara que resultado tiene más caracteres y lo retorna
         return (char *)(lastSlash > lastBackslash ? lastSlash + 1 : lastBackslash + 1);
     }
 }

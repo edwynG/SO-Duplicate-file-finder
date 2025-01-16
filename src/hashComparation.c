@@ -4,8 +4,7 @@
 #include <unistd.h>
 #include "../include/hashComparation.h"
 
-// Calcular el hash MD5 de los contenidos del archivo
-int MDFile(char* filename, char hashValue[33]);
+// Implementación de hashComparation.h para más detalle vea dicho archivo
 
 int hashComparation(char funcMode, char* file1, char* file2){
     int equal = 0;

@@ -2,15 +2,14 @@
 #include <stdlib.h>
 #include <semaphore.h>
 #include <pthread.h>
-#include "../include/concurrentFileMd5.h"
+#include "../include/concurrentFile.h"
 #include "../include/dataStructures.h"
 #include "../include/utils.h"
 #include <string.h>
 
-sem_t mutex_advance;
+// Implementación de concurrentFile.h para más detalle vea dicho archivo
 
-//TODO- Implementación de concurrentFileMd5.h
-//* Para más detalle vea el archivo concurrentFileMd5.h
+sem_t mutex_advance;
 
 struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
 {
@@ -25,7 +24,7 @@ struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
     directoryData->toVisite->addNode(directoryData->toVisite, initDir);
     directoryData->Visited = createList();              //* List (char*)
     directoryData->fileStatistics.numberDuplicate = 0;  // Numero de duplicados
-    directoryData->fileStatistics.Files = createList(); //! List ( FilesDuplicate* )
+    directoryData->fileStatistics.Files = createList(); // List ( FilesDuplicate* )
 
     return directoryData;
 }
@@ -38,25 +37,25 @@ void printFormatFileDuplicates(struct DirectoryData *data)
     }
 
     int numDuplicate = data->fileStatistics.numberDuplicate;
-    //* Extraemos la lista de archivos duplicados
+    // Extrae la lista de archivos duplicados
     struct List *files = data->fileStatistics.Files; //! Lista de FilesDuplicates
 
-    //* Extraemos la cabecera de la lista de archivos duplicados
+    // Extrae la cabecera de la lista de archivos duplicados
     struct Node *headFiles = (struct Node *)files->getHead(files); //! Extraemos el nodo
     printf("Se han encontrado %d archivos duplicados.\n\n", numDuplicate);
 
     while (headFiles != NULL)
     {
-        //! Realizamos la converción de cada valor de la lista de archivos duplicados
+        // Realiza la converción de cada valor de la lista de archivos duplicados
         struct FilesDuplicates *headFileValue = (struct FilesDuplicates *)headFiles->value;
         char *nameFile = getFileName(headFileValue->file);
 
-        //* Tomamos la cabecera de la lista de duplicados del archivos
+        //* Toma la cabecera de la lista de duplicados del archivos
         struct Node *headDuplicates = (struct Node *)headFileValue->duplicates->getHead(headFileValue->duplicates);
 
         while (headDuplicates != NULL)
         {
-            //* Obtenemos el valor del nodo de la lista de duplicados del archivo
+            //* Obtiene el valor del nodo de la lista de duplicados del archivo
             char *nameDuplicate = getFileName((char *)headDuplicates->value);
             printf("%s es duplicado de %s\n", nameDuplicate, nameFile);
             headDuplicates = headDuplicates->next;

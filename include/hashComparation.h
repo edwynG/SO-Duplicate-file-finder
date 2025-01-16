@@ -1,4 +1,4 @@
-// Evita que hashComparation.h se cargue mas de una vez durante el preprocesamiento
+// Evita que hashComparation.h se cargue más de una vez durante el preprocesamiento
 #ifndef HASH_COMPARATION
 #define HASH_COMPARATION
 

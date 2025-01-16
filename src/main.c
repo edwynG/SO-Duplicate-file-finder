@@ -3,7 +3,7 @@
 #include "../include/hashComparation.h"
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
-#include "../include/concurrentFileMd5.h"
+#include "../include/concurrentFile.h"
 #include <pthread.h>
 
 int numThreads;

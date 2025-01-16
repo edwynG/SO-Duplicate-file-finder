@@ -1,4 +1,4 @@
-// Evita que utils.h se cargue mas de una vez durante el preprocesamiento
+// Evita que utils.h se cargue más de una vez durante el preprocesamiento
 #ifndef UTILS
 #define UTILS
 

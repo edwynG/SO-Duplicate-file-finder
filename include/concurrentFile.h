@@ -1,5 +1,5 @@
-#ifndef CONCURRENT_FILE_MD5
-#define CONCURRENT_FILE_MD5
+#ifndef CONCURRENT_FILE
+#define CONCURRENT_FILE
 #include "dataStructures.h"
 
 // Estructura principal para trabajar la infomación manejada entre hilos
