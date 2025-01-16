@@ -7,7 +7,7 @@
 // Implementación de hashComparation.h para más detalle vea dicho archivo
 
 int hashComparation(char funcMode, char* file1, char* file2){
-    int equal = 0;
+    int isEqual = 0;
     
     if(funcMode == 'e'){ // Modo ejecutable (md5-app)
         // 1) Invocar el comando make y obtener el ejecutable
@@ -33,7 +33,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
         if(child1 == 0){ // Proceso child1
             close(pipe1[0]); 
             dup2(pipe1[1], STDOUT_FILENO); // Redirigir consola al pipe
-            execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char *)NULL);
+            execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char*)NULL);
             
             perror("execlp");
             exit(1);
@@ -54,7 +54,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
             if(child2 == 0){ // Proceso child2
                 close(pipe2[0]); 
                 dup2(pipe2[1], STDOUT_FILENO); // Redirigir consola al pipe
-                execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char *)NULL);
+                execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char*)NULL);
                 
                 perror("execlp");
                 exit(1);
@@ -75,7 +75,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
                 printf("hash1 %s\n", hash1);
                 printf("hash2 %s\n", hash2);
                 if(strcmp(hash1, hash2) == 0){ // Comparar hashes
-                    equal = 1;
+                    isEqual = 1;
                 }
             }
         }
@@ -92,10 +92,10 @@ int hashComparation(char funcMode, char* file1, char* file2){
             printf("hash1 %s\n", hash1);
             printf("hash2 %s\n", hash2);
             if(strcmp(hash1, hash2) == 0){ // Comparar hashes
-                equal = 1;
+                isEqual = 1;
             }
         }
     }
-    printf("equal %d\n", equal);
-    return equal;
+    printf("isEqual %d\n", isEqual);
+    return isEqual;
 }

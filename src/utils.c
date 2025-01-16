@@ -8,11 +8,11 @@
 
 // Implementación de utils.h para más detalle vea dicho archivo
 
-char *getFileName(char *path)
+char* getFileName(char* path)
 {
     // Busca la última aparición de '/' o '\' en la ruta
-    const char *lastSlash = strrchr(path, '/');
-    const char *lastBackslash = strrchr(path, '\\');
+    const char* lastSlash = strrchr(path, '/');
+    const char* lastBackslash = strrchr(path, '\\');
 
     // Determina cuál de los dos es el último
     if (lastSlash == NULL && lastBackslash == NULL)
@@ -21,31 +21,31 @@ char *getFileName(char *path)
     }
     else if (lastSlash == NULL)
     {
-        return (char *)(lastBackslash + 1); // Solo hay backslash
+        return (char*)(lastBackslash + 1); // Solo hay backslash
     }
     else if (lastBackslash == NULL)
     {
-        return (char *)(lastSlash + 1); // Solo hay slash
+        return (char*)(lastSlash + 1); // Solo hay slash
     }
     else
     {
         // Comapara que resultado tiene más caracteres y lo retorna
-        return (char *)(lastSlash > lastBackslash ? lastSlash + 1 : lastBackslash + 1);
+        return (char*)(lastSlash > lastBackslash ? lastSlash + 1 : lastBackslash + 1);
     }
 }
 
-struct List *directoryTour(char *DirectoryName)
+struct List* directoryTour(char* DirectoryName)
 {
     if (strcmp(DirectoryName, ".") || strcmp(DirectoryName, ".."))
         return NULL;
 
-    struct dirent *input;
-    DIR *directory = opendir(DirectoryName);
+    struct dirent* input;
+    DIR* directory = opendir(DirectoryName);
     // Verifica que se aun directorio
     if (directory == NULL)
         return NULL; // Si no lo es retorna NULL
 
-    struct List *toVisite = createList();
+    struct List* toVisite = createList();
     while ((input = readdir(directory)) != NULL)
     {
         // Ignorar los directorys "." y ".."

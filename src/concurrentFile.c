@@ -11,25 +11,25 @@
 
 sem_t mutex_advance;
 
-struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
+struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir)
 {
     if (initDir == NULL || (funcMode != 'e' && funcMode != 'i'))
     {
         return NULL;
     }
 
-    struct DirectoryData *directoryData = (struct DirectoryData *)malloc(sizeof(struct DirectoryData));
+    struct DirectoryData* directoryData = (struct DirectoryData*)malloc(sizeof(struct DirectoryData));
     directoryData->funcMode = funcMode;
-    directoryData->toVisite = createList(); //* List (char*)
+    directoryData->toVisite = createList(); // List (char*)
     directoryData->toVisite->addNode(directoryData->toVisite, initDir);
-    directoryData->Visited = createList();              //* List (char*)
+    directoryData->Visited = createList();              // List (char*)
     directoryData->fileStatistics.numberDuplicate = 0;  // Numero de duplicados
-    directoryData->fileStatistics.Files = createList(); // List ( FilesDuplicate* )
+    directoryData->fileStatistics.Files = createList(); // List (FilesDuplicate* )
 
     return directoryData;
 }
 
-void printFormatFileDuplicates(struct DirectoryData *data)
+void printFormatFileDuplicates(struct DirectoryData* data)
 {
     if (data == NULL)
     {
@@ -38,25 +38,25 @@ void printFormatFileDuplicates(struct DirectoryData *data)
 
     int numDuplicate = data->fileStatistics.numberDuplicate;
     // Extrae la lista de archivos duplicados
-    struct List *files = data->fileStatistics.Files; //! Lista de FilesDuplicates
+    struct List* files = data->fileStatistics.Files; //! Lista de FilesDuplicates
 
     // Extrae la cabecera de la lista de archivos duplicados
-    struct Node *headFiles = (struct Node *)files->getHead(files); //! Extraemos el nodo
+    struct Node* headFiles = (struct Node*)files->getHead(files); //! Extraemos el nodo
     printf("Se han encontrado %d archivos duplicados.\n\n", numDuplicate);
 
     while (headFiles != NULL)
     {
         // Realiza la converción de cada valor de la lista de archivos duplicados
-        struct FilesDuplicates *headFileValue = (struct FilesDuplicates *)headFiles->value;
-        char *nameFile = getFileName(headFileValue->file);
+        struct FilesDuplicates* headFileValue = (struct FilesDuplicates*)headFiles->value;
+        char* nameFile = getFileName(headFileValue->file);
 
         // Toma la cabecera de la lista de duplicados del archivos
-        struct Node *headDuplicates = (struct Node *)headFileValue->duplicates->getHead(headFileValue->duplicates);
+        struct Node* headDuplicates = (struct Node*)headFileValue->duplicates->getHead(headFileValue->duplicates);
 
         while (headDuplicates != NULL)
         {
             // Obtiene el valor del nodo de la lista de duplicados del archivo
-            char *nameDuplicate = getFileName((char *)headDuplicates->value);
+            char* nameDuplicate = getFileName((char*)headDuplicates->value);
             printf("%s es duplicado de %s\n", nameDuplicate, nameFile);
             headDuplicates = headDuplicates->next;
         }
@@ -69,11 +69,11 @@ void initSemFile()
     sem_init(&mutex_advance, 0, 1);
 }
 
-void *searchFileDuplicates(void *arg)
+void* searchFileDuplicates(void* arg)
 {
-    struct DirectoryData *data = (struct DirectoryData *)arg;
+    struct DirectoryData* data = (struct DirectoryData*)arg;
     sem_wait(&mutex_advance);
-    printf("Directorio actual: %s\n", (char *)data->toVisite->getHead(data->toVisite)->value);
+    printf("Directorio actual: %s\n", (char*)data->toVisite->getHead(data->toVisite)->value);
     sem_post(&mutex_advance);
     pthread_exit(NULL);
 }

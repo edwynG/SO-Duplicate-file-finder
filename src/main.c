@@ -12,7 +12,7 @@ char funcMode;
 
 // Logica principal del programa
 // @return undefined por los momentos
-struct DirectoryData *startSearchDuplicates()
+struct DirectoryData* startSearchDuplicates()
 {
 
     if (numThreads < 1 || initDir == NULL || funcMode == '\0')
@@ -20,8 +20,8 @@ struct DirectoryData *startSearchDuplicates()
         return NULL;
     }
 
-    pthread_t *pthreads = (pthread_t *)malloc(sizeof(int) * numThreads);
-    struct DirectoryData *directoryData = initStructDirectoryData(funcMode, initDir);
+    pthread_t* pthreads = (pthread_t*)malloc(sizeof(int)* numThreads);
+    struct DirectoryData* directoryData = initStructDirectoryData(funcMode, initDir);
     if (directoryData == NULL)
         return NULL;
 
@@ -45,7 +45,7 @@ struct DirectoryData *startSearchDuplicates()
 // Obtiene los argumentos pasados al ejecutar y los guarda en numThreads, initDir, funcMode
 // @param argc
 // @param argv
-void getArguments(int argc, char *argv[])
+void getArguments(int argc, char* argv[])
 {
     int opt;
 
@@ -72,15 +72,16 @@ void getArguments(int argc, char *argv[])
     }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     getArguments(argc, argv);
 
-    struct DirectoryData *result = startSearchDuplicates();
+    struct DirectoryData* result = startSearchDuplicates();
+
+    // TOFIX: Mensaje de error
     if (result == NULL)
     {
-        // Mensaje de error temporal, no se si haya que ponerlos xd.
-        printf("Argumentos inconrrectos\n");
+        printf("Argumentos incorrectos\n");
         return 1;
     }
 

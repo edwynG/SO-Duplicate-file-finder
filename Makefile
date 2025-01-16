@@ -32,6 +32,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 execute: $(BINDIR)/$(FILE)
 	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
-##! CONTRUCCION Y PRUEBAS DESDE LA CONSOLA
-#* Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
-#* Ejecutar: ./main -t int -d string -m char
+## CONTRUCCION Y PRUEBAS DESDE LA CONSOLA
+# Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
+# Ejecutar: ./main -t int -d string -m char
