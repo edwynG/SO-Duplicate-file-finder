@@ -76,14 +76,14 @@ int main(int argc, char* argv[])
 {
     getArguments(argc, argv);
 
-    // struct DirectoryData* result = startSearchDuplicates();
+    struct DirectoryData* result = startSearchDuplicates();
 
-    // // TOFIX: Mensaje de error
-    // if (result == NULL)
-    // {
-    //     printf("Argumentos incorrectos\n");
-    //     return 1;
-    // }
+    // TOFIX: Mensaje de error
+    if (result == NULL)
+    {
+        printf("Argumentos incorrectos\n");
+        return 1;
+    }
 
     // printFormatFileDuplicates(result);
     return 0;

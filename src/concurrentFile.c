@@ -78,39 +78,46 @@ void* searchFileDuplicates(void* arg)
     // Mientras que “a visitar” no este vacía
     while(!isEmpty(data->toVisit)){
         // Esperar
+        printf("Esperar\n");
         sem_wait(&mutex_advance);
+        printf("Comenzar\n");
 
         // Obtener el siguiente nodo “a visitar”
         struct Node* toVisitNode = data->toVisit->getHead(data->toVisit);
+        printf("toVisitNode %s\n", (char*)toVisitNode->value);
 
         // Determinar tipo
         struct stat info;
-        char* path = getFileName((char*)toVisitNode->value); // TOFIX: path completo?
-        if (lstat(path, &info) == 0){ 
+        if(lstat((char*)toVisitNode->value, &info) == 0){ // TOFIX: path completo?
             if(getType(info.st_mode) == 'd'){ // Si es un directorio
-                printf("Directorio");
-                // Enumerar los archivos que contiene
-                // Para todos los archivos que no sean “.” y “..”, guardar registros acerca de ellos en la estructura de datos “a visitar”
+                printf("Directorio\n");
+                // TOFIX: enumerar?
+                // Enumerar los archivos que contiene y guardar registros acerca de ellos en la estructura de datos “a visitar”
+                directoryTour((char*)toVisitNode->value, data->toVisit);
 
-            }else if(getType(info.st_mode) == 'f' && info.st_size != 0){ // Si es un archivo de datos no vacío
-                printf("Archivo");
-                // Comprobar la igualdad contra los hashes de todos los archivos en la estructura de datos “visitados”
-                struct Node* currentNode = data->Visited->getHead(data->Visited);
-                while(currentNode != NULL){
-                    if(hashComparation(data->funcMode, toVisitNode->value, currentNode->value)){
-                        printf("Copia");
-                        // TOFIX: estadisticas
-                        // data->fileStatistics.numberDuplicates++; 
-                        // data->fileStatistics.Files->addNode(data->fileStatistics.Files, toVisitNode->value);
+            }else{
+                if(info.st_size != 0){ // Si es un archivo de datos no vacío
+                    printf("Archivo\n");
+                    // Comprobar la igualdad contra los hashes de todos los archivos en la estructura de datos “visitados”
+                    struct Node* currentNode = data->Visited->getHead(data->Visited);
+                    while(currentNode != NULL){
+                        if(hashComparation(data->funcMode, toVisitNode->value, currentNode->value)){
+                            printf("Copia\n");
+                            // TOFIX: estadisticas
+                            // data->fileStatistics.numberDuplicates++; 
+                            // data->fileStatistics.Files->addNode(data->fileStatistics.Files, toVisitNode->value);
+                        }
+                        currentNode = currentNode->next;
                     }
-                    currentNode = currentNode->next;
+                    // Agregar el archivo que se acaba de verificar a “visitados” 
+                    data->Visited->addNode(data->Visited, toVisitNode->value);
                 }
-                // Agregar el archivo que se acaba de verificar a “visitados” y remover de ToVisitar
-                data->Visited->addNode(data->Visited, toVisitNode->value);
-                data->toVisit->removeNode(data->toVisit, toVisitNode);
             }
         }
         
+        // Remover el archivo que se acaba de verificar de “a visitar”
+        data->toVisit->removeNode(data->toVisit, toVisitNode);
+
         // Liberar
         sem_post(&mutex_advance);
     }

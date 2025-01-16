@@ -116,6 +116,7 @@ struct List* createList()
 {
     struct List* list = (struct List*)malloc(sizeof(struct List));
     list->addNode = addNode;
+    list->removeNode = removeNode;
     list->destructor = destructor;
     list->getHead = getHead;
     list->getTail = getTail;

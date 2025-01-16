@@ -44,41 +44,38 @@ char getType(unsigned int mode){
     }
 }
 
-struct List* directoryTour(char* DirectoryName)
-{
+void directoryTour(char* DirectoryName, struct List* toVisit){
     if (!strcmp(DirectoryName, ".") || !strcmp(DirectoryName, "..")){
-        return NULL;
+        return;
     }
 
     struct dirent* input;
     DIR* directory = opendir(DirectoryName);
     // Verifica que sea un directorio
     if (directory == NULL){
-        return NULL; // Si no lo es retorna NULL
+        return; // Si no lo es termina
     }
     
-    struct List* toVisit = createList();
     while ((input = readdir(directory)) != NULL)
     {
         // Ignorar los directorios "." y ".."
         if (strcmp(input->d_name, ".") != 0 && strcmp(input->d_name, "..") != 0)
         {
-            char pathComplet[1024];
-            snprintf(pathComplet, sizeof(pathComplet), "%s/%s", DirectoryName, input->d_name);
+            char fullPath[1024];
+            snprintf(fullPath, sizeof(fullPath), "%s/%s", DirectoryName, input->d_name);
 
             struct stat info;
             // Usar lstat para obtener información sobre el archivo
-            if (lstat(pathComplet, &info) == 0)
+            if (lstat(fullPath, &info) == 0)
             {
-                // Ignorar enlaces simbólicos
+                // Si es un enlace simbólico: se ignora
                 if (getType(info.st_mode) != 'l')
                 {
-                    toVisit->addNode(toVisit, pathComplet);
+                    printf("fullPath %s\n", fullPath);
+                    toVisit->addNode(toVisit, fullPath);
                 }
             }
         }
     }
-
     closedir(directory);
-    return toVisit;
 }

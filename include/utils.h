@@ -14,9 +14,9 @@ char* getFileName(char* path);
 // @return (char) 'd', 'l', 'f'
 char getType(unsigned int mode);
 
-// Lista todas los archivos y carpetas de un directorio
+// Agrega a una lista todas los archivos y carpetas de un directorio
 // @param DirectoryName ruta del directorio
-// @return List* (char*)
-struct List* directoryTour(char* DirectoryName);
+// @param toVisit lista a usar
+void directoryTour(char* DirectoryName, struct List* toVisit);
 
 #endif
