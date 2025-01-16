@@ -95,7 +95,7 @@ struct Node *getTail(struct List *list)
     return list->tail;
 };
 
-int moveNodeToMy(struct List *me, struct List *from)
+int moveNodeToMine(struct List *me, struct List *from)
 {
     if (me == NULL || from == NULL)
     {
@@ -121,7 +121,7 @@ struct List *createList() //! USAR SI SE DESEA CREAR UNA LISTA
     list->getHead = getHead;
     list->getTail = getTail;
     list->isEmpty = isEmpty;
-    list->moveNodeToMy = moveNodeToMy;
+    list->moveNodeToMine = moveNodeToMine;
     list->head = NULL;
     list->tail = NULL;
     return list;

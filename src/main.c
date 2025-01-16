@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <bits/getopt_core.h>
-#include "../include/comparation.h"
+#include "../include/hashComparation.h"
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
 #include "../include/concurrentFileMd5.h"

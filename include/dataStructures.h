@@ -2,7 +2,7 @@
 #ifndef DATA_STRUCTURE
 #define DATA_STRUCTURE
 
-//? Nodo generico
+// Nodo generico
 struct Node
 {
     void *value;
@@ -10,7 +10,6 @@ struct Node
     struct Node *before;
 };
 
-//? Lista generica
 // Estructura para crear lista de diferentes tipos de datos
 struct List
 {
@@ -18,73 +17,71 @@ struct List
     struct Node *head;
     struct Node *tail;
 
-    //* funcion para remover un elemento
+    //* Remueve un elemento
     int (*removeNode)(struct List *, struct Node *);
 
-    //* funcion para obtener el primer elemento
+    //* Obtiene el primer elemento
     struct Node *(*getHead)(struct List *);
 
-    //* funcion para obtener el ultimo elemento
+    //* Obtiene el ultimo elemento
     struct Node *(*getTail)(struct List *);
 
-    //* verifica si esta vacia la lista
+    //* Verifica si esta vacia la lista
     int (*isEmpty)(struct List *);
 
-    //* destructor para liberar memoria
+    //* Destructor para liberar memoria
     void (*destructor)(struct List *);
 
     //* Añade un elemento al la lista
     int (*addNode)(struct List *, void *);
 
     //* Añade elementos de otra lista y los elimina de ella
-    int (*moveNodeToMy)(struct List *, struct List *);
+    int (*moveNodeToMine)(struct List *, struct List *);
 };
 
-//* Metodos
+// Metodos
 
-// verifica si la lista esta vacia
+// Verifica si la lista esta vacia
 int isEmpty(struct List *list);
 
-// remueve elementos de la lista
+// Remueve elementos de la lista
 int removeNode(struct List *list, struct Node *node);
 
 // Libera la memoria reservada por la lista
 void destructor(struct List *list);
 
-// Obtener cabecera de la lista
+// Obtiene cabecera de la lista
 struct Node *getHead(struct List *list);
 
-// Obtener cola de la lista
+// Obtiene cola de la lista
 struct Node *getTail(struct List *list);
 
-// Añadir elementos a la lista
+// Añade elementos a la lista
 int addNode(struct List *list, void *value);
 
-//* metodo para mover nodos de otra listas a la lista propia.
 // Mueve los elementos y vacia la lista
-// @param to from
-// @return int (0 o 1)
-int moveNodeToMy(struct List *me, struct List *from);
+// @param from
+// @return (int)
+int moveNodeToMine(struct List *me, struct List *from);
 
-//! Función para crear una lista
-// Esta función tiene el proposito de crear instancias de la estructura List
-// @return List*
-struct List *createList(); //! USAR SI SE DESEA CREAR UNA LISTA
+// Crea instancias de la estructura List
+// @return (List*)
+struct List *createList();
 
 // Estructura para archivos duplicados
 struct FilesDuplicates
 {
     char *file;
-    //! Lista para llevar registro de los archivos duplicados
-    struct List *duplicates; //* (char*)
+    // Lista para llevar registro de los archivos duplicados
+    struct List *duplicates; // * (char*)
 };
 
 // Estructura para la estadistica
 struct FileStatistics
 {
     int numberDuplicate;
-    //! Lista de Archivos duplicados
-    struct List *Files; //* FilesDuplicates*
+    // Lista de Archivos duplicados
+    struct List *Files; // * FilesDuplicates*
 };
 
 #endif
