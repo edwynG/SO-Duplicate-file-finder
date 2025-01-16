@@ -4,12 +4,15 @@
 
 #include "dataStructures.h"
 
-#define UTILS // TOFIX: por que repetir?
-
 // Devuelve el nombre de un archivo o directorio
 // @param path ruta del arhivo o directorio
 // @return (char*)
 char* getFileName(char* path);
+
+// Devuelve el tipo: directorio, enlace simbólico o archivo
+// @param mode
+// @return (char) 'd', 'l', 'f'
+char getType(unsigned int mode);
 
 // Lista todas los archivos y carpetas de un directorio
 // @param DirectoryName ruta del directorio

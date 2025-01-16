@@ -34,21 +34,33 @@ char* getFileName(char* path)
     }
 }
 
+char getType(unsigned int mode){
+    if (S_ISDIR(mode)) {
+        return 'd';
+    } else if (S_ISLNK(mode)) {
+        return 'l';
+    } else {
+        return 'f';
+    }
+}
+
 struct List* directoryTour(char* DirectoryName)
 {
-    if (strcmp(DirectoryName, ".") || strcmp(DirectoryName, ".."))
+    if (!strcmp(DirectoryName, ".") || !strcmp(DirectoryName, "..")){
         return NULL;
+    }
 
     struct dirent* input;
     DIR* directory = opendir(DirectoryName);
-    // Verifica que se aun directorio
-    if (directory == NULL)
+    // Verifica que sea un directorio
+    if (directory == NULL){
         return NULL; // Si no lo es retorna NULL
-
-    struct List* toVisite = createList();
+    }
+    
+    struct List* toVisit = createList();
     while ((input = readdir(directory)) != NULL)
     {
-        // Ignorar los directorys "." y ".."
+        // Ignorar los directorios "." y ".."
         if (strcmp(input->d_name, ".") != 0 && strcmp(input->d_name, "..") != 0)
         {
             char pathComplet[1024];
@@ -59,20 +71,14 @@ struct List* directoryTour(char* DirectoryName)
             if (lstat(pathComplet, &info) == 0)
             {
                 // Ignorar enlaces simbólicos
-                if (!S_ISLNK(info.st_mode))
+                if (getType(info.st_mode) != 'l')
                 {
-                    toVisite->addNode(toVisite, pathComplet);
-                    // Si es un directory, llamar recursivamente
-                    // Implementación antigua..
-                    // if (S_ISDIR(info.st_mode))
-                    // {
-                    //     directoryTour(pathComplet);
-                    // }
+                    toVisit->addNode(toVisit, pathComplet);
                 }
             }
         }
     }
 
     closedir(directory);
-    return toVisite;
+    return toVisit;
 }

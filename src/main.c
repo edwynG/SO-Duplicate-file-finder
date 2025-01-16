@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <bits/getopt_core.h>
 #include <pthread.h>
 #include "../include/hashComparation.h"
@@ -14,7 +15,6 @@ char funcMode;
 // @return undefined por los momentos
 struct DirectoryData* startSearchDuplicates()
 {
-
     if (numThreads < 1 || initDir == NULL || funcMode == '\0')
     {
         return NULL;
@@ -25,10 +25,10 @@ struct DirectoryData* startSearchDuplicates()
     if (directoryData == NULL)
         return NULL;
 
-    // inicializa semaforos
+    // Inicializa semaforos
     initSemFile();
 
-    // se crean los hilos..
+    // Crea los hilos
     for (int i = 0; i < numThreads; i++)
     {
         pthread_create(&pthreads[i], NULL, searchFileDuplicates, directoryData);
@@ -76,15 +76,15 @@ int main(int argc, char* argv[])
 {
     getArguments(argc, argv);
 
-    struct DirectoryData* result = startSearchDuplicates();
+    // struct DirectoryData* result = startSearchDuplicates();
 
-    // TOFIX: Mensaje de error
-    if (result == NULL)
-    {
-        printf("Argumentos incorrectos\n");
-        return 1;
-    }
+    // // TOFIX: Mensaje de error
+    // if (result == NULL)
+    // {
+    //     printf("Argumentos incorrectos\n");
+    //     return 1;
+    // }
 
-    printFormatFileDuplicates(result);
+    // printFormatFileDuplicates(result);
     return 0;
 }

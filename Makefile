@@ -11,11 +11,12 @@ OBJ = $(SOURCE:$(SRCDIR)/%.c=$(OBJDIR)/%.o) # Aplica un map en SOURCE y crea arc
 
 MD5LIBRARYDIR = resources/md5-lib/libmd5.a
 FILE = main
-T = 0
-D = string
+T = 1
+D = tests
 M = e
 
 all: prepare $(BINDIR)/$(FILE)
+	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
 clean:
 	rm -rf $(OBJDIR) $(BINDIR) || true
@@ -28,9 +29,6 @@ $(BINDIR)/$(FILE): $(OBJ)
 	
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	gcc $(CFLAGS) -c $< -o $@
-
-execute: $(BINDIR)/$(FILE)
-	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
 ## CONTRUCCION Y PRUEBAS DESDE LA CONSOLA
 # Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a

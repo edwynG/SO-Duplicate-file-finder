@@ -79,7 +79,7 @@ struct FilesDuplicates
 // Estructura para la estadistica
 struct FileStatistics
 {
-    int numberDuplicate;
+    int numberDuplicates;
     // Lista de Archivos duplicados
     struct List* Files; // FilesDuplicates*
 };
