@@ -10,10 +10,9 @@ MD5LIBRARYDIR = resources/md5-lib/libmd5.a
 FILE = main
 T = 2
 D = tests
-M = l
+M = e
 
 all: prepare $(BINDIR)/$(FILE)
-	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
 clean:
 	rm -rf $(OBJDIR) $(BINDIR) || true
@@ -26,6 +25,9 @@ $(BINDIR)/$(FILE): $(OBJ)
 	
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	gcc $(CFLAGS) -c $< -o $@
+
+execute:
+	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
 # CONSTRUCCION Y PRUEBAS DESDE LA CONSOLA
 # Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
