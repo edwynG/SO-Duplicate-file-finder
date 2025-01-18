@@ -76,15 +76,21 @@ void* searchFileDuplicates(void* arg)
     struct DirectoryData* data = (struct DirectoryData*)arg;
 
     // Mientras que “a visitar” no este vacía
-    while(!isEmpty(data->toVisit)){
+    while(1){
         // Espera
         printf("SEARCHFILEDUPLICATES Esperar...\n");
         sem_wait(&mutex_advance);
+        if (isEmpty(data->toVisit)) {
+            printf("SEARCHFILEDUPLICATES Liberar...\n\n");
+            sem_post(&mutex_advance); // Libera
+            break; // Si la lista está vacía, sale del bucle
+        }
+
         printf("SEARCHFILEDUPLICATES Comenzar...\n");
 
         // Obtiene el siguiente nodo “a visitar”
         struct Node* toVisitNode = data->toVisit->getHead(data->toVisit);
-        printf("SEARCHFILEDUPLICATES toVisitNode %s\n", (char*) toVisitNode);
+        printf("SEARCHFILEDUPLICATES toVisitNode %s\n", (char*)toVisitNode->value);
 
         // Determina tipo
         struct stat info;
@@ -122,7 +128,7 @@ void* searchFileDuplicates(void* arg)
         data->toVisit->removeNode(data->toVisit, toVisitNode);
 
         // Libera
-        printf("SEARCHFILEDUPLICATES Liberar...\n");
+        printf("SEARCHFILEDUPLICATES Liberar...\n\n");
         sem_post(&mutex_advance);
     }
         
