@@ -24,7 +24,7 @@ struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir)
     directoryData->funcMode = funcMode;
     directoryData->toVisit = createList(); // List (char*)
     directoryData->toVisit->addNode(directoryData->toVisit, initDir);
-    directoryData->Visited = createList();              // List (char*)
+    directoryData->Visited = createList(); // List (char*)
     directoryData->fileStatistics.numberDuplicates = 0;  // Numero de duplicados
     directoryData->fileStatistics.Files = createList(); // List (FilesDuplicate*)
 
@@ -77,48 +77,52 @@ void* searchFileDuplicates(void* arg)
 
     // Mientras que “a visitar” no este vacía
     while(!isEmpty(data->toVisit)){
-        // Esperar
-        printf("Esperar\n");
+        // Espera
+        printf("SEARCHFILEDUPLICATES Esperar...\n");
         sem_wait(&mutex_advance);
-        printf("Comenzar\n");
+        printf("SEARCHFILEDUPLICATES Comenzar...\n");
 
-        // Obtener el siguiente nodo “a visitar”
+        // Obtiene el siguiente nodo “a visitar”
         struct Node* toVisitNode = data->toVisit->getHead(data->toVisit);
-        printf("toVisitNode %s\n", (char*)toVisitNode->value);
+        printf("SEARCHFILEDUPLICATES toVisitNode %s\n", (char*) toVisitNode);
 
-        // Determinar tipo
+        // Determina tipo
         struct stat info;
-        if(lstat((char*)toVisitNode->value, &info) == 0){ // TOFIX: path completo?
+        if(lstat((char*)toVisitNode->value, &info) == 0){
+
             if(getType(info.st_mode) == 'd'){ // Si es un directorio
-                printf("Directorio\n");
+                printf("SEARCHFILEDUPLICATES Directorio\n");
+
+                // Enumera los archivos que contiene y guarda registros acerca de ellos en la estructura de datos “a visitar”
                 // TOFIX: enumerar?
-                // Enumerar los archivos que contiene y guardar registros acerca de ellos en la estructura de datos “a visitar”
                 directoryTour((char*)toVisitNode->value, data->toVisit);
 
             }else{
                 if(info.st_size != 0){ // Si es un archivo de datos no vacío
-                    printf("Archivo\n");
-                    // Comprobar la igualdad contra los hashes de todos los archivos en la estructura de datos “visitados”
-                    struct Node* currentNode = data->Visited->getHead(data->Visited);
-                    while(currentNode != NULL){
-                        if(hashComparation(data->funcMode, toVisitNode->value, currentNode->value)){
-                            printf("Copia\n");
-                            // TOFIX: estadisticas
-                            // data->fileStatistics.numberDuplicates++; 
-                            // data->fileStatistics.Files->addNode(data->fileStatistics.Files, toVisitNode->value);
+                    printf("SEARCHFILEDUPLICATES Archivo\n");
+
+                    // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos “visitados”
+                    struct Node* toCompareNode = data->Visited->getHead(data->Visited);
+                    while(toCompareNode != NULL){
+                        printf("SEARCHFILEDUPLICATES toCompareNode %s\n", (char*)toCompareNode->value);
+                        if(hashComparation(data->funcMode, toVisitNode->value, toCompareNode->value)){
+                            data->fileStatistics.numberDuplicates++; 
+                            // TOFIX: data->fileStatistics.Files->addNode(data->fileStatistics.Files, toVisitNode->value);
                         }
-                        currentNode = currentNode->next;
+                        toCompareNode = toCompareNode->next;
                     }
-                    // Agregar el archivo que se acaba de verificar a “visitados” 
+
+                    // Agrega el archivo que se acaba de verificar a “visitados” 
                     data->Visited->addNode(data->Visited, toVisitNode->value);
                 }
             }
         }
         
-        // Remover el archivo que se acaba de verificar de “a visitar”
+        // Remueve el archivo que se acaba de verificar de “a visitar”
         data->toVisit->removeNode(data->toVisit, toVisitNode);
 
-        // Liberar
+        // Libera
+        printf("SEARCHFILEDUPLICATES Liberar...\n");
         sem_post(&mutex_advance);
     }
         

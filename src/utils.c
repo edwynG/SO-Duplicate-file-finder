@@ -29,7 +29,7 @@ char* getFileName(char* path)
     }
     else
     {
-        // Comapara que resultado tiene más caracteres y lo retorna
+        // Compara qué resultado tiene más caracteres y lo retorna
         return (char*)(lastSlash > lastBackslash ? lastSlash + 1 : lastBackslash + 1);
     }
 }
@@ -45,37 +45,41 @@ char getType(unsigned int mode){
 }
 
 void directoryTour(char* DirectoryName, struct List* toVisit){
-    if (!strcmp(DirectoryName, ".") || !strcmp(DirectoryName, "..")){
+    if (strcmp(DirectoryName, ".") == 0 || strcmp(DirectoryName, "..") == 0){
         return;
     }
 
-    struct dirent* input;
     DIR* directory = opendir(DirectoryName);
     // Verifica que sea un directorio
     if (directory == NULL){
         return; // Si no lo es termina
     }
     
+    struct dirent* input;
     while ((input = readdir(directory)) != NULL)
     {
-        // Ignorar los directorios "." y ".."
+        // Ignora los directorios "." y ".."
         if (strcmp(input->d_name, ".") != 0 && strcmp(input->d_name, "..") != 0)
         {
             char fullPath[1024];
             snprintf(fullPath, sizeof(fullPath), "%s/%s", DirectoryName, input->d_name);
 
+            // Usa lstat para obtener información sobre el archivo
             struct stat info;
-            // Usar lstat para obtener información sobre el archivo
             if (lstat(fullPath, &info) == 0)
             {
-                // Si es un enlace simbólico: se ignora
+                // Si es un enlace simbólico se ignora
                 if (getType(info.st_mode) != 'l')
                 {
-                    printf("fullPath %s\n", fullPath);
-                    toVisit->addNode(toVisit, fullPath);
+                    // Genera copia para no sobreescribir value del Node
+                    char* fullPathCopy = (char*)malloc(strlen(fullPath) + 1); 
+                    strcpy(fullPathCopy, fullPath); 
+                    printf("DIRECTORYTOUR fullPath %s\n", fullPathCopy);
+                    toVisit->addNode(toVisit, fullPathCopy);
                 }
             }
         }
     }
+    
     closedir(directory);
 }

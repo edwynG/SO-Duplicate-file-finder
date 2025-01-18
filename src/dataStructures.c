@@ -19,16 +19,16 @@ int addNode(struct List* list, void* value)
     newNode->next = NULL;
     newNode->before = NULL;
 
-    // verifica si no hay ningun elemento
+    // Verifica si no hay ningun elemento
     if (list->head == NULL)
     {
-        // inserta el nuevo elemento
+        // Inserta el nuevo elemento
         list->head = newNode;
         list->tail = newNode;
         return 1;
     }
 
-    // inserta el nuevo elemento al final
+    // Inserta el nuevo elemento al final
     list->tail->next = newNode;
     newNode->before = list->tail;
     list->tail = newNode;

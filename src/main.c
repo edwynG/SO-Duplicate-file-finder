@@ -78,10 +78,8 @@ int main(int argc, char* argv[])
 
     struct DirectoryData* result = startSearchDuplicates();
 
-    // TOFIX: Mensaje de error
     if (result == NULL)
     {
-        printf("Argumentos incorrectos\n");
         return 1;
     }
 

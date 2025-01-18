@@ -23,7 +23,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
             exit(1);
         }
 
-        // Crear child1
+        // Crea child1
         int child1 = fork();
         if(child1 < 0){
             perror("fork");
@@ -32,19 +32,19 @@ int hashComparation(char funcMode, char* file1, char* file2){
 
         if(child1 == 0){ // Proceso child1
             close(pipe1[0]); 
-            dup2(pipe1[1], STDOUT_FILENO); // Redirigir consola al pipe
+            dup2(pipe1[1], STDOUT_FILENO); // Redirige consola al pipe
             execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char*)NULL);
             
             perror("execlp");
             exit(1);
         }else{ // Proceso parent
-            // Crear pipe2
+            // Crea pipe2
             if(pipe(pipe2) == -1){
                 perror("pipe");
                 exit(1);
             }
 
-            // Crear child2
+            // Crea child2
             int child2 = fork();
             if(child2 < 0){
                 perror("fork");
@@ -53,7 +53,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
 
             if(child2 == 0){ // Proceso child2
                 close(pipe2[0]); 
-                dup2(pipe2[1], STDOUT_FILENO); // Redirigir consola al pipe
+                dup2(pipe2[1], STDOUT_FILENO); // Redirige consola al pipe
                 execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char*)NULL);
                 
                 perror("execlp");
@@ -62,19 +62,19 @@ int hashComparation(char funcMode, char* file1, char* file2){
                 close(pipe1[1]);
                 close(pipe2[1]);
 
-                // Leer el hash del primer archivo
+                // Lee el hash del primer archivo
                 char hash1[33];
                 read(pipe1[0], hash1, 32);
                 hash1[32] = '\0';
 
-                // Leer el hash del segundo archivo
+                // Lee el hash del segundo archivo
                 char hash2[33];
                 read(pipe2[0], hash2, 32);
                 hash2[32] = '\0';
 
-                printf("hash1 %s\n", hash1);
-                printf("hash2 %s\n", hash2);
-                if(strcmp(hash1, hash2) == 0){ // Comparar hashes
+                printf("HASHCOMPARATION hash1 %s\n", hash1);
+                printf("HASHCOMPARATION hash2 %s\n", hash2);
+                if(strcmp(hash1, hash2) == 0){ // Compara hashes
                     isEqual = 1;
                 }
             }
@@ -89,13 +89,13 @@ int hashComparation(char funcMode, char* file1, char* file2){
         char hash1[33];
         char hash2[33];
         if(MDFile(file1, hash1) && MDFile(file2, hash2)){
-            printf("hash1 %s\n", hash1);
-            printf("hash2 %s\n", hash2);
-            if(strcmp(hash1, hash2) == 0){ // Comparar hashes
+            printf("HASHCOMPARATION hash1 %s\n", hash1);
+            printf("HASHCOMPARATION hash2 %s\n", hash2);
+            if(strcmp(hash1, hash2) == 0){ // Compara hashes
                 isEqual = 1;
             }
         }
     }
-    printf("isEqual %d\n", isEqual);
+    printf("HASHCOMPARATION isEqual %d\n", isEqual);
     return isEqual;
 }

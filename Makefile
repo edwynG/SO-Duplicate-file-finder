@@ -6,14 +6,11 @@ CFLAGS = -Wall -lpthread -I ./include  # Agrega el directorio de las cabeceras
 SOURCE = $(wildcard $(SRCDIR)/*.c) # Lista de achivos fuentes
 OBJ = $(SOURCE:$(SRCDIR)/%.c=$(OBJDIR)/%.o) # Aplica un map en SOURCE y crea archivos objetos
 
-# $(info SRC = $(SOURCE)) ##Debug para visualizar las varibales
-# $(info OBJ = $(OBJ))
-
 MD5LIBRARYDIR = resources/md5-lib/libmd5.a
 FILE = main
-T = 1
+T = 2
 D = tests
-M = e
+M = l
 
 all: prepare $(BINDIR)/$(FILE)
 	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
@@ -30,6 +27,10 @@ $(BINDIR)/$(FILE): $(OBJ)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	gcc $(CFLAGS) -c $< -o $@
 
-## CONTRUCCION Y PRUEBAS DESDE LA CONSOLA
+# CONSTRUCCION Y PRUEBAS DESDE LA CONSOLA
 # Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
 # Ejecutar: ./main -t int -d string -m char
+
+
+# $(info SRC = $(SOURCE)) ##Debug para visualizar las variables
+# $(info OBJ = $(OBJ))
