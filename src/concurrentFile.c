@@ -80,7 +80,7 @@ void* searchFileDuplicates(void* arg)
         // Espera
         printf("SEARCHFILEDUPLICATES Esperar...\n");
         sem_wait(&mutex_advance);
-        if (isEmpty(data->toVisit)) {
+        if (isEmpty(data->toVisit)){
             printf("SEARCHFILEDUPLICATES Liberar...\n\n");
             sem_post(&mutex_advance); // Libera
             break; // Si la lista está vacía, sale del bucle
