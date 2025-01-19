@@ -72,7 +72,7 @@ struct List* createList();
 struct FilesDuplicates
 {
     char* file;
-    // Lista para llevar registro de los archivos duplicados
+    // Lista para el registro del duplicados del archivo
     struct List* duplicates; // (char*)
 };
 
@@ -80,7 +80,7 @@ struct FilesDuplicates
 struct FileStatistics
 {
     int numberDuplicates;
-    // Lista de Archivos duplicados
+    // Lista de archivos que tienen duplicados
     struct List* Files; // FilesDuplicates*
 };
 

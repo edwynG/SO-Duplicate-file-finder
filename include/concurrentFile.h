@@ -16,6 +16,9 @@ struct DirectoryData
 // Define la estructura de datos sobre donde trabajaran los hilos
 struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir);
 
+// Libera los recursos ocupados por una estructura DirectoryData*
+void freeDirectoryData(struct DirectoryData* data);
+
 // Encuentra los archivos duplicados en un directorio dado a traves de 
 // una estructura (struct DirectoryData). Esta función es especial para
 // trabajar con hilos

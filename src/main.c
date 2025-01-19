@@ -8,20 +8,20 @@
 #include "../include/concurrentFile.h"
 
 int numThreads;
-char* initDir;
+char *initDir;
 char funcMode;
 
 // Logica principal del programa
-// @return undefined por los momentos
-struct DirectoryData* startSearchDuplicates()
+// @return DirectoryData*
+struct DirectoryData *startSearchDuplicates()
 {
     if (numThreads < 1 || initDir == NULL || funcMode == '\0')
     {
         return NULL;
     }
 
-    pthread_t* pthreads = (pthread_t*)malloc(sizeof(int)* numThreads);
-    struct DirectoryData* directoryData = initStructDirectoryData(funcMode, initDir);
+    pthread_t pthreads[numThreads];
+    struct DirectoryData *directoryData = initStructDirectoryData(funcMode, initDir);
     if (directoryData == NULL)
         return NULL;
 
@@ -38,14 +38,15 @@ struct DirectoryData* startSearchDuplicates()
     {
         pthread_join(pthreads[i], NULL);
     }
-
+    // liberar hilos
+    // free(pthreads);
     return directoryData;
 }
 
 // Obtiene los argumentos pasados al ejecutar y los guarda en numThreads, initDir, funcMode
 // @param argc
 // @param argv
-void getArguments(int argc, char* argv[])
+void getArguments(int argc, char *argv[])
 {
     int opt;
 
@@ -66,23 +67,21 @@ void getArguments(int argc, char* argv[])
             // printf("funcMode: %c\n", funcMode);
             break;
         default:
-            //
             break;
         }
     }
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
+    // Obtener argumentos
     getArguments(argc, argv);
+    // Buscar duplicados
+    struct DirectoryData *result = startSearchDuplicates();
+    // Imprimir estadisticas
+    printFormatFileDuplicates(result);
+    // Liberar recursos
+    freeDirectoryData(result);
 
-    struct DirectoryData* result = startSearchDuplicates();
-
-    if (result == NULL)
-    {
-        return 1;
-    }
-
-    // printFormatFileDuplicates(result);
     return 0;
 }

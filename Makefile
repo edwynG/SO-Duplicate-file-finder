@@ -26,7 +26,7 @@ $(BINDIR)/$(FILE): $(OBJ)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	gcc $(CFLAGS) -c $< -o $@
 
-execute:
+execute: $(BINDIR)/$(FILE)
 	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
 # CONSTRUCCION Y PRUEBAS DESDE LA CONSOLA
