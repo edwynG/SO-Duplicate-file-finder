@@ -4,7 +4,6 @@ Este programa, desarrollado en **C**, busca y detecta archivos duplicados en un 
 
 El proyecto está diseñado para ser modular y fácil de mantener, con una estructura clara que separa el código fuente, los encabezados, los recursos y los archivos de configuración.
 
-
 ## Estructura del Proyecto
 
 La estructura del proyecto es la siguiente:
@@ -19,7 +18,9 @@ mi_proyecto/
 │   └── ...             # Otros módulos
 ├── include/            # Archivos de cabecera
 │   └── ...             # Declaraciones de funciones y estructuras
-├── obj/                # Archivos objeto(Se genera en el build) 
+├── tests/              # Archivos de pruebas
+│   └── ...             # Pruebas unitarias
+├── obj/                # Archivos objeto(Se genera en el build)
 ├── bin/                # Ejecutables(Build)
 ├── Makefile            # Archivo Makefile
 └── README.md           # Este archivo
@@ -27,5 +28,5 @@ mi_proyecto/
 
 ## Colaboradores
 
-* **Edwyn Guzmán**
-* **Samantha Ramirez**
+- **Edwyn Guzmán**
+- **Samantha Ramirez**

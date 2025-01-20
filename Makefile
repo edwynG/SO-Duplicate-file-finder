@@ -1,18 +1,38 @@
+SRCDIR = src
+OBJDIR = obj
+BINDIR = bin
 
-all: prepare bin/program
+CFLAGS = -Wall -lpthread -I ./include  # Agrega el directorio de las cabeceras
+SOURCE = $(wildcard $(SRCDIR)/*.c) # Lista de achivos fuentes
+OBJ = $(SOURCE:$(SRCDIR)/%.c=$(OBJDIR)/%.o) # Aplica un map en SOURCE y crea archivos objetos
+
+MD5LIBRARYDIR = resources/md5-lib/libmd5.a
+FILE = main
+T = 2
+D = tests
+M = e
+
+all: prepare $(BINDIR)/$(FILE)
+
+clean:
+	rm -rf $(OBJDIR) $(BINDIR) || true
 
 prepare:
-	@echo "Preparando el entorno..."
-	mkdir -p bin obj 
+	mkdir -p $(OBJDIR) $(BINDIR)
 
-bin/program:
-	@echo "Build proyect"
+$(BINDIR)/$(FILE): $(OBJ)
+	gcc $(CFLAGS) -o $@ $^ $(MD5LIBRARYDIR)
+	
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	gcc $(CFLAGS) -c $< -o $@
 
-execute:
-	mkdir -p output 
-	gcc src/main.c -o output/program 
-	./output/program 
-	rm -rf output || true
-clean:
-	rm -rf bin obj 
+execute: $(BINDIR)/$(FILE)
+	./$(BINDIR)/$(FILE) -t $(T) -d $(D) -m $(M)
 
+# CONSTRUCCION Y PRUEBAS DESDE LA CONSOLA
+# Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
+# Ejecutar: ./main -t int -d string -m char
+
+
+# $(info SRC = $(SOURCE)) ##Debug para visualizar las variables
+# $(info OBJ = $(OBJ))
