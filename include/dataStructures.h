@@ -72,7 +72,7 @@ struct List* createList();
 struct FilesDuplicates
 {
     char* file;
-    // Lista para el registro del duplicados del archivo
+    // Lista para el registro de duplicados del archivo
     struct List* duplicates; // (char*)
 };
 
