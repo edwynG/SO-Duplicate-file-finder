@@ -134,7 +134,6 @@ void* searchFileDuplicates(void* arg)
                 printf("SEARCHFILEDUPLICATES Directorio\n");
 
                 // Enumera los archivos que contiene y guarda registros acerca de ellos en la estructura de datos “a visitar”
-                // TOFIX: enumerar?
                 directoryTour((char*)toVisitNode->value, data->toVisit);
             }
             else

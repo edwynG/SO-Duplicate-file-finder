@@ -19,14 +19,14 @@ int hashComparation(char funcMode, char* file1, char* file2){
         int pipe1[2]; // 0 extremo lectura, 1 extremo escritura
         int pipe2[2]; // 0 extremo lectura, 1 extremo escritura
         if(pipe(pipe1) == -1){
-            perror("pipe");
+            perror("Error pipe");
             exit(1);
         }
 
         // Crea child1
         int child1 = fork();
         if(child1 < 0){
-            perror("fork");
+            perror("Error fork");
             exit(1);
         }
 
@@ -35,19 +35,19 @@ int hashComparation(char funcMode, char* file1, char* file2){
             dup2(pipe1[1], STDOUT_FILENO); // Redirige consola al pipe
             execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char*)NULL);
             
-            perror("execlp");
+            perror("Error execlp");
             exit(1);
         }else{ // Proceso parent
             // Crea pipe2
             if(pipe(pipe2) == -1){
-                perror("pipe");
+                perror("Error pipe");
                 exit(1);
             }
 
             // Crea child2
             int child2 = fork();
             if(child2 < 0){
-                perror("fork");
+                perror("Error fork");
                 exit(1);
             }
 
@@ -56,7 +56,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
                 dup2(pipe2[1], STDOUT_FILENO); // Redirige consola al pipe
                 execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char*)NULL);
                 
-                perror("execlp");
+                perror("Error execlp");
                 exit(1);
             }else{ // Proceso parent
                 close(pipe1[1]);
@@ -92,6 +92,8 @@ int hashComparation(char funcMode, char* file1, char* file2){
             if(strcmp(hash1, hash2) == 0){ // Compara hashes
                 isEqual = 1;
             }
+        }else{
+            printf("Error en MDFile\n");
         }
     }
     printf("HASHCOMPARATION isEqual %d\n", isEqual);

@@ -78,10 +78,14 @@ int main(int argc, char* argv[])
     getArguments(argc, argv);
     // Buscar duplicados
     struct DirectoryData* result = startSearchDuplicates();
-    // Imprimir estadisticas
-    printFormatFileDuplicates(result);
-    // Liberar recursos
-    freeDirectoryData(result);
+    if(result == NULL){
+        printf("Error en argumentos ingresados\n");
+    }else{
+        // Imprimir estadisticas
+        printFormatFileDuplicates(result);
+        // Liberar recursos
+        freeDirectoryData(result);
+    }
 
     return 0;
 }
