@@ -63,7 +63,7 @@ void getArguments(int argc, char* argv[])
             // printf("initDir: %s\n", initDir);
             break;
         case 'm': // Argumento modo
-            funcMode =* optarg;
+            funcMode = *optarg;
             // printf("funcMode: %c\n", funcMode);
             break;
         default:
@@ -78,10 +78,14 @@ int main(int argc, char* argv[])
     getArguments(argc, argv);
     // Buscar duplicados
     struct DirectoryData* result = startSearchDuplicates();
-    // Imprimir estadisticas
-    printFormatFileDuplicates(result);
-    // Liberar recursos
-    freeDirectoryData(result);
+    if(result == NULL){
+        printf("Error en argumentos ingresados\n");
+    }else{
+        // Imprimir estadisticas
+        printFormatFileDuplicates(result);
+        // Liberar recursos
+        freeDirectoryData(result);
+    }
 
     return 0;
 }
