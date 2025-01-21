@@ -83,8 +83,6 @@ int hashComparation(char funcMode, char* file1, char* file2){
         // 1) Invocar el comando make y obtener el archivo de biblioteca estática (libmd5.a)
         // 2) Enlazar la librería estática (archivo de extensión .a) al proyecto
         // 2) Usar la función int MDFile(char* filename, char hashValue[33});
-        // filename nombre del archivo
-        // hashValue almacena el hash
         // Valor retorno: 1 o 0 si hubo un error
         char hash1[33];
         char hash2[33];

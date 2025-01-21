@@ -63,7 +63,7 @@ void getArguments(int argc, char* argv[])
             // printf("initDir: %s\n", initDir);
             break;
         case 'm': // Argumento modo
-            funcMode =* optarg;
+            funcMode = *optarg;
             // printf("funcMode: %c\n", funcMode);
             break;
         default:
