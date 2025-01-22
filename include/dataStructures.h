@@ -15,7 +15,9 @@ struct List
 {
     // Puntero al primer nodo
     struct Node* head;
+    // Puntero al ultimo nodo
     struct Node* tail;
+    // tamaño de la lista
     int size;
 
     // Remueve un elemento
