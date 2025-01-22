@@ -16,6 +16,7 @@ struct List
     // Puntero al primer nodo
     struct Node* head;
     struct Node* tail;
+    int size;
 
     // Remueve un elemento
     int (*removeNode)(struct List* , struct Node*);
@@ -35,8 +36,7 @@ struct List
     // Añade un elemento al la lista
     int (*addNode)(struct List*, void*);
 
-    // Añade elementos de otra lista y los elimina de ella
-    int (*moveNodeToMine)(struct List*, struct List*);
+    
 };
 
 // Metodos
@@ -59,20 +59,17 @@ struct Node* getTail(struct List* list);
 // Añade elementos a la lista
 int addNode(struct List* list, void* value);
 
-// Mueve los elementos y vacia la lista
-// @param from
-// @return (int)
-int moveNodeToMine(struct List* me, struct List* from);
 
 // Crea instancias de la estructura List
 // @return (List*)
 struct List* createList();
 
-// Estructura para archivos duplicados
+// Estructura para tener los duplicados de un archivo. Tambien, se puede decir que es una categoria o partición 
 struct FilesDuplicates
 {
-    char* file;
-    // Lista para el registro de duplicados del archivo
+    // archivo que define la categoria
+    char* file; 
+    // Lista de archivos duplicados de la categoria
     struct List* duplicates; // (char*)
 };
 
@@ -80,8 +77,8 @@ struct FilesDuplicates
 struct FileStatistics
 {
     int numberDuplicates;
-    // Lista de archivos que tienen duplicados
-    struct List* Files; // FilesDuplicates*
+    // Lista de categorias
+    struct List* Files; // Nodos de tipo FilesDuplicates*
 };
 
 #endif

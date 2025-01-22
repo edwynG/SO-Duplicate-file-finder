@@ -1,6 +1,8 @@
+#include "dataStructures.h"
+
 #ifndef CONCURRENT_FILE
 #define CONCURRENT_FILE
-#include "dataStructures.h"
+
 
 // Estructura principal para trabajar la infomación manejada entre hilos
 struct DirectoryData
@@ -8,7 +10,7 @@ struct DirectoryData
     char funcMode;
     struct List* toVisit; // List (char*)
     struct List* Visited;  // List (char*)
-    struct FileStatistics fileStatistics;
+    struct FileStatistics* fileStatistics;
 };
 
 // Metodos

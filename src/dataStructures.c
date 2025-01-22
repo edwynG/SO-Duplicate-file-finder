@@ -4,20 +4,21 @@
 
 // Implementación de dataStructures.h para más detalle vea dicho archivo
 
-int isEmpty(struct List* list)
+int isEmpty(struct List *list)
 {
     return list->head == NULL;
 };
 
-int addNode(struct List* list, void* value)
+int addNode(struct List *list, void *value)
 {
     if (list == NULL)
         return 0;
 
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
     newNode->value = value;
     newNode->next = NULL;
     newNode->before = NULL;
+    list->size++;
 
     // Verifica si no hay ningun elemento
     if (list->head == NULL)
@@ -35,7 +36,7 @@ int addNode(struct List* list, void* value)
     return 1;
 };
 
-int removeNode(struct List* list, struct Node* node)
+int removeNode(struct List *list, struct Node *node)
 {
     if (list == NULL || node == NULL)
         return 0;
@@ -51,6 +52,7 @@ int removeNode(struct List* list, struct Node* node)
         {
             list->tail = NULL; // Si la lista queda vacía
         }
+
         free(node);
         return 1;
     }
@@ -66,62 +68,46 @@ int removeNode(struct List* list, struct Node* node)
     node->before->next = node->next;
     node->next->before = node->before;
     free(node);
+    list->size--;
     return 1;
 };
 
-void destructor(struct List* list)
+void destructor(struct List *list)
 {
     if (list == NULL)
         return;
 
-    struct Node* temp = list->getHead(list);
+    struct Node *temp = list->getHead(list);
     while (temp != NULL)
     {
-        struct Node* t = temp->next;
+        struct Node *t = temp->next;
         free(temp);
         temp = t;
+        list->size--;
     }
     free(list);
 };
 
-struct Node* getHead(struct List* list)
+struct Node *getHead(struct List *list)
 {
     return list->head;
 };
 
-struct Node* getTail(struct List* list)
+struct Node *getTail(struct List *list)
 {
     return list->tail;
 };
 
-int moveNodeToMine(struct List* me, struct List* from)
+struct List *createList()
 {
-    if (me == NULL || from == NULL)
-    {
-        return 0;
-    }
-
-    struct Node* nodeTail = from->getHead(from);
-    while (nodeTail != NULL)
-    {
-        me->addNode(me, nodeTail);
-        nodeTail = nodeTail->next;
-    }
-    from->head=NULL;
-    from->tail=NULL;
-    return 1;
-}
-
-struct List* createList()
-{
-    struct List* list = (struct List*)malloc(sizeof(struct List));
+    struct List *list = (struct List *)malloc(sizeof(struct List));
+    list->size = 0;
     list->addNode = addNode;
     list->removeNode = removeNode;
     list->destructor = destructor;
     list->getHead = getHead;
     list->getTail = getTail;
     list->isEmpty = isEmpty;
-    list->moveNodeToMine = moveNodeToMine;
     list->head = NULL;
     list->tail = NULL;
     return list;
