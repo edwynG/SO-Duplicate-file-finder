@@ -1,8 +1,8 @@
-// Evita que utils.h se cargue más de una vez durante el preprocesamiento
 #include "dataStructures.h"
-
+// Evita que utils.h se cargue más de una vez durante el preprocesamiento
 #ifndef UTILS
 #define UTILS
+
 // Devuelve el nombre de un archivo o directorio
 // @param path ruta del arhivo o directorio
 // @return (char*)
@@ -18,11 +18,11 @@ char getType(unsigned int mode);
 // @param toVisit lista a usar
 void directoryTour(char *DirectoryName, struct List *toVisit);
 
-//   Verifica si un archivo pertence a una categoría o partición. Si pertenece, indica la categoria mendiante un parametro por referencia.
-//   @param list Un puntero a la estructura List.
-//   @param value Una cadena que representa el valor a verificar.
-//   @param type Un carácter que representa el modo de hash a usar.
-//   @param parentNode Un apuntador a un puntero de una estructura FilesDuplicates que representara la categoria a la que pertenzca el archivo.
-//   @return Un entero que indica si la categoría está incluida (1) o no (0).
+// Verifica si un archivo pertence a una categoría o partición. Si pertenece, indica la categoria mediante un parametro por referencia
+// @param list Un puntero a la estructura List
+// @param value Una cadena que representa el valor a verificar
+// @param type Un caracter que representa el modo de hash a usar
+// @param parentNode Un apuntador a un puntero de una estructura FilesDuplicates que representará la categoria a la que pertenezca el archivo
+// @return (int) que indica si la categoría está incluida (1) o no (0)
 int isIncludedCategory(struct List *listCategory, char *value, char type, struct FilesDuplicates **parentNode);
 #endif

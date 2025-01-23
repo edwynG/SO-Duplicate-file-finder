@@ -15,6 +15,7 @@ sem_t mutex_advance;
 
 struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir)
 {
+    // Valida argumentos ingresados
     if (initDir == NULL || (funcMode != 'e' && funcMode != 'l'))
     {
         return NULL;
@@ -107,7 +108,7 @@ void* searchFileDuplicates(void* arg)
 {
     struct DirectoryData* data = (struct DirectoryData*)arg;
 
-    // Mientras que “a visitar” no este vacía
+    // Mientras que "a visitar" no este vacía
     while (1)
     {
         // Espera
@@ -117,12 +118,12 @@ void* searchFileDuplicates(void* arg)
         {
             printf("SEARCHFILEDUPLICATES Liberar...\n\n");
             sem_post(&mutex_advance); // Libera
-            break;                    // Si la lista está vacía, sale del bucle
+            break; // Si la lista está vacía, sale del bucle
         }
 
         printf("SEARCHFILEDUPLICATES Comenzar...\n");
 
-        // Obtiene el siguiente nodo “a visitar”
+        // Obtiene el siguiente nodo "a visitar"
         struct Node* toVisitNode = data->toVisit->getHead(data->toVisit);
         printf("SEARCHFILEDUPLICATES toVisitNode %s\n", (char*)toVisitNode->value);
 
@@ -140,24 +141,24 @@ void* searchFileDuplicates(void* arg)
             }
             else
             {
-                if (info.st_size != 0)
-                { // Si es un archivo de datos no vacío
+                if (info.st_size != 0) // Verifica que no sea vacío
+                { // Si es un archivo 
                     printf("SEARCHFILEDUPLICATES Archivo\n");
 
-                    // estructura que contine la estadistica
+                    // Estructura que contine la estadistica
                     struct FileStatistics *fileStatistics = data->fileStatistics;
 
                     // Lista de duplicados para la estadistica, cada nodo es una categoria o particion
                     struct List *categoryList = fileStatistics->Files;
 
-                    // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos “visitados”
+                    // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos "visitados"
                     struct Node *toCompareNode = data->Visited->getHead(data->Visited);
 
                     while (toCompareNode != NULL)
                     {
                         printf("SEARCHFILEDUPLICATES toCompareNode %s\n", (char*)toCompareNode->value);
 
-                        // Se crea una categoria o partición del nodo visitado
+                        // Crea una categoria o partición del nodo visitado
                         struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
                         dataCategory->file = (char *)toCompareNode->value;
                         dataCategory->duplicates = createList();
@@ -172,7 +173,7 @@ void* searchFileDuplicates(void* arg)
                             {
                                 printf("%s pertenece a la categoria %s\n", (char *)toVisitNode->value, (char *)parentCategory->file);
                                 printf("Añadiendo a la categoria..\n");
-                                // Agrega el nodo 'a visitar' a su categoria correspondiente
+                                // Agrega el nodo "a visitar" a su categoria correspondiente
                                 parentCategory->duplicates->addNode(parentCategory->duplicates, (char *)toVisitNode->value);
                                 fileStatistics->numberDuplicates++;
                                 // Libera la categoria o particion sin uso
@@ -203,12 +204,12 @@ void* searchFileDuplicates(void* arg)
                         toCompareNode = toCompareNode->next;
                     }
 
-                    // Agrega el archivo que se acaba de verificar a “visitados”
+                    // Agrega el archivo que se acaba de verificar a "visitados"
                     data->Visited->addNode(data->Visited, toVisitNode->value);
                 }
             }
 
-            // Remueve el archivo que se acaba de verificar de “a visitar”
+            // Remueve el archivo que se acaba de verificar de "a visitar"
             data->toVisit->removeNode(data->toVisit, toVisitNode);
 
             // Libera
