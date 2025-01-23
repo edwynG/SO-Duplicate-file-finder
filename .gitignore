@@ -9,3 +9,4 @@ bin
 *.gch
 .vscode
 output
+*.png
