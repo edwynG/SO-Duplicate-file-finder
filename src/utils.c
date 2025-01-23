@@ -81,10 +81,11 @@ void directoryTour(char *DirectoryName, struct List *toVisit)
                 // Si es un enlace simbólico se ignora
                 if (getType(info.st_mode) != 'l')
                 {
-                    // Genera copia para no sobreescribir value del Node
+                    // Genera copia para no sobreescribir atributo value del Node
                     char *fullPathCopy = (char *)malloc(strlen(fullPath) + 1);
                     strcpy(fullPathCopy, fullPath);
                     printf("DIRECTORYTOUR fullPath %s\n", fullPathCopy);
+                    // Agrega el nodo a "a visitar"
                     toVisit->addNode(toVisit, fullPathCopy);
                 }
             }
