@@ -15,6 +15,7 @@ sem_t mutex_advance;
 
 struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
 {
+    // Valida argumentos ingresados
     if (initDir == NULL || (funcMode != 'e' && funcMode != 'l'))
     {
         return NULL;
@@ -107,7 +108,7 @@ void *searchFileDuplicates(void *arg)
 {
     struct DirectoryData *data = (struct DirectoryData *)arg;
 
-    // Mientras que “a visitar” no este vacía
+    // Mientras que "a visitar" no este vacía
     while (1)
     {
         // Espera
@@ -115,7 +116,7 @@ void *searchFileDuplicates(void *arg)
         if (isEmpty(data->toVisit))
         {
             sem_post(&mutex_advance); // Libera
-            break;                    // Si la lista está vacía, sale del bucle
+            break; // Si la lista está vacía, sale del bucle
         }
 
         // Obtiene el siguiente nodo “a visitar”
@@ -137,13 +138,13 @@ void *searchFileDuplicates(void *arg)
                 if (info.st_size != 0)
                 { // Si es un archivo de datos no vacío
 
-                    // estructura que contine la estadistica
+                    // Estructura que contine la estadistica
                     struct FileStatistics *fileStatistics = data->fileStatistics;
 
                     // Lista de duplicados para la estadistica, cada nodo es una categoria o particion
                     struct List *categoryList = fileStatistics->Files;
 
-                    // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos “visitados”
+                    // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos "visitados"
                     struct Node *toCompareNode = data->Visited->getHead(data->Visited);
 
                     while (toCompareNode != NULL)
@@ -191,12 +192,12 @@ void *searchFileDuplicates(void *arg)
                         toCompareNode = toCompareNode->next;
                     }
 
-                    // Agrega el archivo que se acaba de verificar a “visitados”
+                    // Agrega el archivo que se acaba de verificar a "visitados"
                     data->Visited->addNode(data->Visited, toVisitNode->value);
                 }
             }
 
-            // Remueve el archivo que se acaba de verificar de “a visitar”
+            // Remueve el archivo que se acaba de verificar de "a visitar"
             data->toVisit->removeNode(data->toVisit, toVisitNode);
 
             // Libera

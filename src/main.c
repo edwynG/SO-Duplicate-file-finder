@@ -15,6 +15,7 @@ char funcMode;
 // @return DirectoryData*
 struct DirectoryData *startSearchDuplicates()
 {
+    // Valida argumentos ingresados
     if (numThreads < 1 || initDir == NULL || funcMode == '\0')
     {
         return NULL;
@@ -34,11 +35,12 @@ struct DirectoryData *startSearchDuplicates()
         pthread_create(&pthreads[i], NULL, searchFileDuplicates, directoryData);
     }
 
+    // Espera a los hilos
     for (int i = 0; i < numThreads; i++)
     {
         pthread_join(pthreads[i], NULL);
     }
-    // liberar hilos
+    // Libera hilos
     free(pthreads);
     return directoryData;
 }
@@ -74,9 +76,9 @@ void getArguments(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-    // Obtener argumentos
+    // Obtiene argumentos
     getArguments(argc, argv);
-    // Buscar duplicados
+    // Busca duplicados
     struct DirectoryData *result = startSearchDuplicates();
     if (result == NULL)
     {
@@ -84,9 +86,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        // Imprimir estadisticas
+        // Imprime estadisticas
         printFormatFileDuplicates(result);
-        // Liberar recursos
+        // Libera recursos
         freeDirectoryData(result);
     }
 

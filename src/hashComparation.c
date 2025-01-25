@@ -9,12 +9,7 @@
 int hashComparation(char funcMode, char* file1, char* file2){
     int isEqual = 0;
     
-    if(funcMode == 'e'){ // Modo ejecutable (md5-app)
-        // 1) Invocar el comando make y obtener el ejecutable
-        // 2) Escribir en la linea de comandos ./md5 <nombrearchivo> para imprimir el hash MD5 del archivo <nombrearchivo>
-        // 3) Crear tubería entre una invocación con fork del código MD5 y su programa
-        // 4) Leer el hash de la tubería
-        
+    if(funcMode == 'e'){ // Modo ejecutable (md5-app)        
         // Crear pipe1
         int pipe1[2]; // 0 extremo lectura, 1 extremo escritura
         int pipe2[2]; // 0 extremo lectura, 1 extremo escritura
@@ -33,7 +28,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
         if(child1 == 0){ // Proceso child1
             close(pipe1[0]); 
             dup2(pipe1[1], STDOUT_FILENO); // Redirige consola al pipe
-            execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char*)NULL);
+            execlp("resources/md5-app/md5", "resources/md5-app/md5", file1, (char*)NULL); // Reemplaza el proceso por el código MD5 y le pasa como argumento file1
             
             perror("Error execlp");
             exit(1);
@@ -54,7 +49,7 @@ int hashComparation(char funcMode, char* file1, char* file2){
             if(child2 == 0){ // Proceso child2
                 close(pipe2[0]); 
                 dup2(pipe2[1], STDOUT_FILENO); // Redirige consola al pipe
-                execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char*)NULL);
+                execlp("resources/md5-app/md5", "resources/md5-app/md5", file2, (char*)NULL); // Reemplaza el proceso por el código MD5 y le pasa como argumento file2
                 
                 perror("Error execlp");
                 exit(1);
@@ -78,10 +73,6 @@ int hashComparation(char funcMode, char* file1, char* file2){
             }
         }
     }else if(funcMode == 'l'){ // Modo biblioteca (md5-lib)
-        // 1) Invocar el comando make y obtener el archivo de biblioteca estática (libmd5.a)
-        // 2) Enlazar la librería estática (archivo de extensión .a) al proyecto
-        // 2) Usar la función int MDFile(char* filename, char hashValue[33});
-        // Valor retorno: 1 o 0 si hubo un error
         char hash1[33];
         char hash2[33];
         if(MDFile(file1, hash1) && MDFile(file2, hash2)){

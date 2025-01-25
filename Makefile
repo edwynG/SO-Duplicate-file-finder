@@ -32,7 +32,3 @@ execute: $(BINDIR)/$(FILE)
 # CONSTRUCCION Y PRUEBAS DESDE LA CONSOLA
 # Compilar: gcc main.c -o main ../resources/md5-lib/libmd5.a
 # Ejecutar: ./duplicados -t int -d string -m char
-
-
-# $(info SRC = $(SOURCE)) ##Debug para visualizar las variables
-# $(info OBJ = $(OBJ))

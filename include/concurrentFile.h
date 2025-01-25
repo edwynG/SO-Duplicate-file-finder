@@ -3,7 +3,6 @@
 #ifndef CONCURRENT_FILE
 #define CONCURRENT_FILE
 
-
 // Estructura principal para trabajar la infomación manejada entre hilos
 struct DirectoryData
 {
