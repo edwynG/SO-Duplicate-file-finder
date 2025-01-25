@@ -84,7 +84,6 @@ void directoryTour(char *DirectoryName, struct List *toVisit)
                     // Genera copia para no sobreescribir value del Node
                     char *fullPathCopy = (char *)malloc(strlen(fullPath) + 1);
                     strcpy(fullPathCopy, fullPath);
-                    printf("DIRECTORYTOUR fullPath %s\n", fullPathCopy);
                     toVisit->addNode(toVisit, fullPathCopy);
                 }
             }
