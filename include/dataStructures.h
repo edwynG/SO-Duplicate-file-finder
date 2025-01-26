@@ -19,25 +19,6 @@ struct List
     struct Node* tail;
     // tamaño de la lista
     int size;
-
-    // Remueve un elemento
-    int (*removeNode)(struct List* , struct Node*);
-
-    // Obtiene el primer elemento
-    struct Node* (*getHead)(struct List*);
-
-    // Obtiene el ultimo elemento
-    struct Node* (*getTail)(struct List*);
-
-    // Verifica si esta vacia la lista
-    int (*isEmpty)(struct List*);
-
-    // Destructor para liberar memoria
-    void (*destructor)(struct List*);
-
-    // Añade un elemento al la lista
-    int (*addNode)(struct List*, void*);
-
     
 };
 

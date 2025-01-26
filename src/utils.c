@@ -84,7 +84,7 @@ void directoryTour(char *DirectoryName, struct List *toVisit)
                     // Genera copia para no sobreescribir atributo value del Node
                     char *fullPathCopy = (char *)malloc(strlen(fullPath) + 1);
                     strcpy(fullPathCopy, fullPath);
-                    toVisit->addNode(toVisit, fullPathCopy);
+                    addNode(toVisit, fullPathCopy);
                 }
             }
         }
@@ -100,7 +100,7 @@ int isIncludedCategory(struct List *listCategory, char *value, char type, struct
         return 0;
     }
 
-    struct Node *current = listCategory->head;
+    struct Node *current = getHead(listCategory);
     while (current != NULL)
     {
         struct FilesDuplicates *currentData = (struct FilesDuplicates *)current->value;
