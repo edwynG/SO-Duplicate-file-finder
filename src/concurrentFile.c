@@ -13,7 +13,7 @@
 
 sem_t mutex_advance;
 
-struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir)
+struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
 {
     // Valida argumentos ingresados
     if (initDir == NULL || (funcMode != 'e' && funcMode != 'l'))
@@ -27,10 +27,10 @@ struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir)
         return NULL;
     }
 
-    struct DirectoryData* directoryData = (struct DirectoryData*)malloc(sizeof(struct DirectoryData));
+    struct DirectoryData *directoryData = (struct DirectoryData *)malloc(sizeof(struct DirectoryData));
     directoryData->funcMode = funcMode;
     directoryData->toVisit = createList(); // List (char*)
-    directoryData->toVisit->addNode(directoryData->toVisit, initDir);
+    addNode(directoryData->toVisit, initDir);
     directoryData->Visited = createList(); // List (char*)
     directoryData->fileStatistics = (struct FileStatistics *)malloc(sizeof(struct FileStatistics));
     directoryData->fileStatistics->numberDuplicates = 0; // Numero de duplicados
@@ -39,32 +39,32 @@ struct DirectoryData* initStructDirectoryData(char funcMode, char* initDir)
     return directoryData;
 }
 
-void freeDirectoryData(struct DirectoryData* data)
+void freeDirectoryData(struct DirectoryData *data)
 {
     if (data == NULL)
     {
         return;
     }
 
-    data->toVisit->destructor(data->toVisit);
-    data->Visited->destructor(data->Visited);
+    destructor(data->toVisit);
+    destructor(data->Visited);
     struct List *files = data->fileStatistics->Files;
-    struct Node *headDuplicateNode = files->getHead(files);
+    struct Node *headDuplicateNode = getHead(files);
 
     // Libera todas las listas que estan en Files
     while (headDuplicateNode != NULL)
     {
-        struct FilesDuplicates* duplicates = (struct FilesDuplicates*)headDuplicateNode->value;
-        duplicates->duplicates->destructor(duplicates->duplicates);
+        struct FilesDuplicates *duplicates = (struct FilesDuplicates *)headDuplicateNode->value;
+        destructor(duplicates->duplicates);
         headDuplicateNode = headDuplicateNode->next;
     }
 
     free(data->fileStatistics);
-    files->destructor(files);
+    destructor(files);
     free(data);
 }
 
-void printFormatFileDuplicates(struct DirectoryData* data)
+void printFormatFileDuplicates(struct DirectoryData *data)
 {
     if (data == NULL)
     {
@@ -76,22 +76,22 @@ void printFormatFileDuplicates(struct DirectoryData* data)
     struct List *files = data->fileStatistics->Files; // Lista de FilesDuplicates
 
     // Extrae la cabecera de la lista de archivos duplicados
-    struct Node* headFiles = (struct Node*)files->getHead(files); // Extraemos el nodo
+    struct Node *headFiles = (struct Node *)getHead(files); // Extraemos el nodo
     printf("Se han encontrado %d archivos duplicados.\n\n", numDuplicate);
 
     while (headFiles != NULL)
     {
         // Realiza la converción de cada valor de la lista de archivos duplicados
-        struct FilesDuplicates* headFileValue = (struct FilesDuplicates*)headFiles->value;
-        char* nameFile = getFileName(headFileValue->file);
+        struct FilesDuplicates *headFileValue = (struct FilesDuplicates *)headFiles->value;
+        char *nameFile = getFileName(headFileValue->file);
 
         // Toma la cabecera de la lista de duplicados del archivos
-        struct Node* headDuplicates = (struct Node*)headFileValue->duplicates->getHead(headFileValue->duplicates);
+        struct Node *headDuplicates = (struct Node *)getHead(headFileValue->duplicates);
 
         while (headDuplicates != NULL)
         {
             // Obtiene el valor del nodo de la lista de duplicados del archivo
-            char* nameDuplicate = getFileName((char*)headDuplicates->value);
+            char *nameDuplicate = getFileName((char *)headDuplicates->value);
             printf("%s es duplicado de %s\n", nameDuplicate, nameFile);
             headDuplicates = headDuplicates->next;
         }
@@ -104,46 +104,38 @@ void initSemFile()
     sem_init(&mutex_advance, 0, 1);
 }
 
-void* searchFileDuplicates(void* arg)
+void *searchFileDuplicates(void *arg)
 {
-    struct DirectoryData* data = (struct DirectoryData*)arg;
-
+    struct DirectoryData *data = (struct DirectoryData *)arg;
     // Mientras que "a visitar" no este vacía
     while (1)
     {
         // Espera
-        printf("SEARCHFILEDUPLICATES Esperar...\n");
         sem_wait(&mutex_advance);
         if (isEmpty(data->toVisit))
         {
-            printf("SEARCHFILEDUPLICATES Liberar...\n\n");
             sem_post(&mutex_advance); // Libera
             break; // Si la lista está vacía, sale del bucle
         }
 
-        printf("SEARCHFILEDUPLICATES Comenzar...\n");
-
-        // Obtiene el siguiente nodo "a visitar"
-        struct Node* toVisitNode = data->toVisit->getHead(data->toVisit);
-        printf("SEARCHFILEDUPLICATES toVisitNode %s\n", (char*)toVisitNode->value);
+        // Obtiene el siguiente nodo “a visitar”
+        struct Node *toVisitNode = getHead(data->toVisit);
 
         // Determina tipo
         struct stat info;
-        if (lstat((char*)toVisitNode->value, &info) == 0)
+        if (lstat((char *)toVisitNode->value, &info) == 0)
         {
 
             if (getType(info.st_mode) == 'd')
             { // Si es un directorio
-                printf("SEARCHFILEDUPLICATES Directorio\n");
 
                 // Enumera los archivos que contiene y guarda registros acerca de ellos en la estructura de datos “a visitar”
-                directoryTour((char*)toVisitNode->value, data->toVisit);
+                directoryTour((char *)toVisitNode->value, data->toVisit);
             }
             else
             {
-                if (info.st_size != 0) // Verifica que no sea vacío
-                { // Si es un archivo 
-                    printf("SEARCHFILEDUPLICATES Archivo\n");
+                if (info.st_size != 0)
+                { // Si es un archivo de datos no vacío
 
                     // Estructura que contine la estadistica
                     struct FileStatistics *fileStatistics = data->fileStatistics;
@@ -152,13 +144,11 @@ void* searchFileDuplicates(void* arg)
                     struct List *categoryList = fileStatistics->Files;
 
                     // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos "visitados"
-                    struct Node *toCompareNode = data->Visited->getHead(data->Visited);
+                    struct Node *toCompareNode = getHead(data->Visited);
 
                     while (toCompareNode != NULL)
                     {
-                        printf("SEARCHFILEDUPLICATES toCompareNode %s\n", (char*)toCompareNode->value);
-
-                        // Crea una categoria o partición del nodo visitado
+                        // Se crea una categoria o partición del nodo visitado
                         struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
                         dataCategory->file = (char *)toCompareNode->value;
                         dataCategory->duplicates = createList();
@@ -171,10 +161,8 @@ void* searchFileDuplicates(void* arg)
                             // Verifica si el archivo pertenece a alguna de las categorias
                             if (isIncludedCategory(categoryList, toVisitNode->value, data->funcMode, &parentCategory))
                             {
-                                printf("%s pertenece a la categoria %s\n", (char *)toVisitNode->value, (char *)parentCategory->file);
-                                printf("Añadiendo a la categoria..\n");
-                                // Agrega el nodo "a visitar" a su categoria correspondiente
-                                parentCategory->duplicates->addNode(parentCategory->duplicates, (char *)toVisitNode->value);
+                                // Agrega el nodo 'a visitar' a su categoria correspondiente
+                                addNode(parentCategory->duplicates, (char *)toVisitNode->value);
                                 fileStatistics->numberDuplicates++;
                                 // Libera la categoria o particion sin uso
                                 destructor(dataCategory->duplicates);
@@ -182,19 +170,15 @@ void* searchFileDuplicates(void* arg)
                                 // Detiene el bucle porque ya se encontro la categoria a la que pertenece el archivo
                                 break;
                             }
-
                             // Crea una categoria nueva si el archivo no pertenece a ninguna
                             if (parentCategory == NULL)
                             {
-                                printf("%s no pertenece a ninguna categoria\n", (char *)toVisitNode->value);
-                                printf("Creando categoria %s..\n", dataCategory->file);
-                                dataCategory->duplicates->addNode(dataCategory->duplicates, toVisitNode->value);
-                                categoryList->addNode(categoryList, dataCategory);
+                                addNode(dataCategory->duplicates, toVisitNode->value);
+                                addNode(categoryList, dataCategory);
                                 fileStatistics->numberDuplicates++;
                                 break;
                             }
                         }
-
                         // Libera la categoria o particion si no tiene duplicados(significa que no tiene uso)
                         if (isEmpty(dataCategory->duplicates))
                         {
@@ -203,20 +187,15 @@ void* searchFileDuplicates(void* arg)
                         }
                         toCompareNode = toCompareNode->next;
                     }
-
                     // Agrega el archivo que se acaba de verificar a "visitados"
-                    data->Visited->addNode(data->Visited, toVisitNode->value);
+                    addNode(data->Visited, toVisitNode->value);
                 }
             }
-
             // Remueve el archivo que se acaba de verificar de "a visitar"
-            data->toVisit->removeNode(data->toVisit, toVisitNode);
-
+            removeNode(data->toVisit, toVisitNode);
             // Libera
-            printf("SEARCHFILEDUPLICATES Liberar...\n\n");
             sem_post(&mutex_advance);
         }
     }
-
     pthread_exit(NULL);
 }

@@ -77,7 +77,7 @@ void destructor(struct List *list)
     if (list == NULL)
         return;
 
-    struct Node *temp = list->getHead(list);
+    struct Node *temp = getHead(list);
     while (temp != NULL)
     {
         struct Node *t = temp->next;
@@ -102,12 +102,6 @@ struct List *createList()
 {
     struct List *list = (struct List *)malloc(sizeof(struct List));
     list->size = 0;
-    list->addNode = addNode;
-    list->removeNode = removeNode;
-    list->destructor = destructor;
-    list->getHead = getHead;
-    list->getTail = getTail;
-    list->isEmpty = isEmpty;
     list->head = NULL;
     list->tail = NULL;
     return list;
