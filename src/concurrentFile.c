@@ -196,6 +196,12 @@ void *searchFileDuplicates(void *arg)
             // Libera
             sem_post(&mutex_advance);
         }
+        else
+        {
+            // Libera
+            sem_post(&mutex_advance); // Libera
+            break; // Si la lista está vacía, sale del bucle
+        }
     }
     pthread_exit(NULL);
 }
