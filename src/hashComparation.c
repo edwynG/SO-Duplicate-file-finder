@@ -3,8 +3,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include "../include/hashComparation.h"
-#include "../include/md5ArrayBinary.h"
+#include "../include/md5ArrayBinary.h" // Es importante que esta cabecera se ponga en un solo archivo
 // Implementación de hashComparation.h para más detalle vea dicho archivo
 
 int hashComparation(char funcMode, char *file1, char *file2)
@@ -29,7 +30,7 @@ int hashComparation(char funcMode, char *file1, char *file2)
             exit(1);
         }
         // Escribir el contenido del ejecutable en el archivo temporal
-        fwrite(md5, sizeof(unsigned char), md5_len, fp);
+        fwrite(resources_md5_app_md5, sizeof(unsigned char), resources_md5_app_md5_len, fp);
         fclose(fp);
 
         // Cambiar los permisos del archivo para hacerlo ejecutable
@@ -79,6 +80,10 @@ int hashComparation(char funcMode, char *file1, char *file2)
             }
             else
             { // Proceso parent
+                // Espera que los proceso hijos terminen
+                wait(NULL);
+                wait(NULL);
+
                 close(pipe1[1]);
                 close(pipe2[1]);
                 // Lee el hash del primer archivo

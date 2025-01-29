@@ -7,6 +7,7 @@ SOURCE = $(wildcard $(SRCDIR)/*.c) # Lista de achivos fuentes
 OBJ = $(SOURCE:$(SRCDIR)/%.c=$(OBJDIR)/%.o) # Aplica un map en SOURCE y crea archivos objetos
 
 MD5LIBRARYDIR = resources/md5-lib/libmd5.a
+MD5EXECUTEDIR = resources/md5-app/md5
 FILE = duplicados
 T = 2
 D = tests
@@ -18,6 +19,7 @@ clean:
 	rm -rf $(OBJDIR) $(BINDIR) || true
 
 prepare:
+	xxd -i $(MD5EXECUTEDIR) > include/md5ArrayBinary.h
 	mkdir -p $(OBJDIR) $(BINDIR)
 
 $(BINDIR)/$(FILE): $(OBJ)
