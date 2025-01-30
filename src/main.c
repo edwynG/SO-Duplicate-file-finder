@@ -29,6 +29,9 @@ struct DirectoryData *startSearchDuplicates()
     // Inicializa semaforos
     initSemFile();
 
+    // Agrega archivos a "a visitar"
+    directoryTour(initDir, directoryData->toVisit);
+
     // Crea los hilos
     for (int i = 0; i < numThreads; i++)
     {

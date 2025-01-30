@@ -127,76 +127,63 @@ void *searchFileDuplicates(void *arg)
         struct stat info;
         if (lstat((char *)toVisitNode->value, &info) == 0)
         {
-            
-            if (getType(info.st_mode) == 'd')
-            { // Si es un directorio
+            // Estructura que contine la estadistica
+            struct FileStatistics *fileStatistics = data->fileStatistics;
 
-                // Enumera los archivos que contiene y guarda registros acerca de ellos en la estructura de datos “a visitar”
-                directoryTour((char *)toVisitNode->value, data->toVisit);
-            }
-            else
+            // Lista de duplicados para la estadistica, cada nodo es una categoria o particion
+            struct List *categoryList = fileStatistics->Files;
+
+            // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos "visitados"
+            struct Node *toCompareNode = getHead(data->Visited);
+
+            while (toCompareNode != NULL)
             {
-                if (info.st_size != 0)
-                { // Si es un archivo de datos no vacío
+                // Se crea una categoria o partición del nodo visitado
+                struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
+                dataCategory->file = (char *)toCompareNode->value;
+                dataCategory->duplicates = createList();
 
-                    // Estructura que contine la estadistica
-                    struct FileStatistics *fileStatistics = data->fileStatistics;
+                char hash1[33];
+                char hash2[33];
+                hashCalculation(data->funcMode, toVisitNode->value, hash1);
+                hashCalculation(data->funcMode, toCompareNode->value, hash2);
+                if (hashComparation(hash1, hash2))
+                {
+                    // Variable para almacenar la categoria o particion del archivo a guardar, si es que existe
+                    struct FilesDuplicates *parentCategory = NULL;
 
-                    // Lista de duplicados para la estadistica, cada nodo es una categoria o particion
-                    struct List *categoryList = fileStatistics->Files;
-
-                    // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos "visitados"
-                    struct Node *toCompareNode = getHead(data->Visited);
-
-                    while (toCompareNode != NULL)
+                    // Verifica si el archivo pertenece a alguna de las categorias
+                    if (isIncludedCategory(categoryList, toVisitNode->value, data->funcMode, &parentCategory))
                     {
-                        // Se crea una categoria o partición del nodo visitado
-                        struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
-                        dataCategory->file = (char *)toCompareNode->value;
-                        dataCategory->duplicates = createList();
-
-                        char hash1[33];
-                        char hash2[33];
-                        hashCalculation(data->funcMode, toVisitNode->value, hash1);
-                        hashCalculation(data->funcMode, toCompareNode->value, hash2);
-                        if (hashComparation(hash1, hash2))
-                        {
-                            // Variable para almacenar la categoria o particion del archivo a guardar, si es que existe
-                            struct FilesDuplicates *parentCategory = NULL;
-
-                            // Verifica si el archivo pertenece a alguna de las categorias
-                            if (isIncludedCategory(categoryList, toVisitNode->value, data->funcMode, &parentCategory))
-                            {
-                                // Agrega el nodo 'a visitar' a su categoria correspondiente
-                                addNode(parentCategory->duplicates, (char *)toVisitNode->value);
-                                fileStatistics->numberDuplicates++;
-                                // Libera la categoria o particion sin uso
-                                destructor(dataCategory->duplicates);
-                                free(dataCategory);
-                                // Detiene el bucle porque ya se encontro la categoria a la que pertenece el archivo
-                                break;
-                            }
-                            // Crea una categoria nueva si el archivo no pertenece a ninguna
-                            if (parentCategory == NULL)
-                            {
-                                addNode(dataCategory->duplicates, toVisitNode->value);
-                                addNode(categoryList, dataCategory);
-                                fileStatistics->numberDuplicates++;
-                                break;
-                            }
-                        }
-                        // Libera la categoria o particion si no tiene duplicados(significa que no tiene uso)
-                        if (isEmpty(dataCategory->duplicates))
-                        {
-                            destructor(dataCategory->duplicates);
-                            free(dataCategory);
-                        }
-                        toCompareNode = toCompareNode->next;
+                        // Agrega el nodo 'a visitar' a su categoria correspondiente
+                        addNode(parentCategory->duplicates, (char *)toVisitNode->value);
+                        fileStatistics->numberDuplicates++;
+                        // Libera la categoria o particion sin uso
+                        destructor(dataCategory->duplicates);
+                        free(dataCategory);
+                        // Detiene el bucle porque ya se encontro la categoria a la que pertenece el archivo
+                        break;
                     }
-                    // Agrega el archivo que se acaba de verificar a "visitados"
-                    addNode(data->Visited, toVisitNode->value);
+                    // Crea una categoria nueva si el archivo no pertenece a ninguna
+                    if (parentCategory == NULL)
+                    {
+                        addNode(dataCategory->duplicates, toVisitNode->value);
+                        addNode(categoryList, dataCategory);
+                        fileStatistics->numberDuplicates++;
+                        break;
+                    }
                 }
+                // Libera la categoria o particion si no tiene duplicados(significa que no tiene uso)
+                if (isEmpty(dataCategory->duplicates))
+                {
+                    destructor(dataCategory->duplicates);
+                    free(dataCategory);
+                }
+                toCompareNode = toCompareNode->next;
             }
+            
+            // Agrega el archivo que se acaba de verificar a "visitados"
+            addNode(data->Visited, toVisitNode->value);
             // Remueve el archivo que se acaba de verificar de "a visitar"
             removeNode(data->toVisit, toVisitNode);
             // Libera
