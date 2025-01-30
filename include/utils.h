@@ -24,5 +24,5 @@ void directoryTour(char *DirectoryName, struct List *toVisit);
 // @param type Un caracter que representa el modo de hash a usar
 // @param parentNode Un apuntador a un puntero de una estructura FilesDuplicates que representará la categoria a la que pertenezca el archivo
 // @return (int) que indica si la categoría está incluida (1) o no (0)
-int isIncludedCategory(struct List *listCategory, char *value, char type, struct FilesDuplicates **parentNode);
+int isIncludedCategory(struct List *listCategory, char *hashCompare, struct FilesDuplicates **parentNode);
 #endif

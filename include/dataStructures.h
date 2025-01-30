@@ -50,6 +50,8 @@ struct List* createList();
 // Estructura para tener los duplicados de un archivo. Tambien, se puede decir que es una categoria o partición 
 struct FilesDuplicates
 {
+    // hash para identificar el grupo
+    char* hash;
     // Archivo que define la categoria
     char* file; 
     // Lista de archivos duplicados de la categoria

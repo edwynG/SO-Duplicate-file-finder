@@ -63,6 +63,8 @@ void freeDirectoryData(struct DirectoryData *data)
     free(data->fileStatistics);
     destructor(files);
     free(data);
+    sem_destroy(&mutexToVisit);
+    sem_destroy(&mutexVisited);
 }
 
 void printFormatFileDuplicates(struct DirectoryData *data)
@@ -155,22 +157,26 @@ void *searchFileDuplicates(void *arg)
 
             while (toCompareNode != NULL)
             {
-                // Se crea una categoria o partición del nodo visitado
-                struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
-                dataCategory->file = (char *)toCompareNode->value;
-                dataCategory->duplicates = createList();
 
                 char hash1[33];
                 char hash2[33];
                 hashCalculation(data->funcMode, toVisitNode->value, hash1);
                 hashCalculation(data->funcMode, toCompareNode->value, hash2);
+
+                // Se crea una categoria o partición del nodo visitado
+                struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
+                dataCategory->hash = (char *)malloc(strlen(hash2) + 1);
+                strcpy(dataCategory->hash, hash2);
+                dataCategory->file = (char *)toCompareNode->value;
+                dataCategory->duplicates = createList();
+                
                 if (hashComparation(hash1, hash2))
                 {
                     // Variable para almacenar la categoria o particion del archivo a guardar, si es que existe
                     struct FilesDuplicates *parentCategory = NULL;
 
                     // Verifica si el archivo pertenece a alguna de las categorias
-                    if (isIncludedCategory(categoryList, toVisitNode->value, data->funcMode, &parentCategory))
+                    if (isIncludedCategory(categoryList, hash1, &parentCategory))
                     {
                         // Agrega el nodo 'a visitar' a su categoria correspondiente
                         addNode(parentCategory->duplicates, (char *)toVisitNode->value);

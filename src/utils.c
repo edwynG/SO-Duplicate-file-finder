@@ -100,9 +100,9 @@ void directoryTour(char *DirectoryName, struct List *toVisit)
     closedir(directory);
 }
 
-int isIncludedCategory(struct List *listCategory, char *value, char type, struct FilesDuplicates **parentNode)
+int isIncludedCategory(struct List *listCategory, char *hashCompare,struct FilesDuplicates **parentNode)
 {
-    if (listCategory == NULL || value == NULL)
+    if (listCategory == NULL || hashCompare == NULL)
     {
         return 0;
     }
@@ -111,11 +111,7 @@ int isIncludedCategory(struct List *listCategory, char *value, char type, struct
     while (current != NULL)
     {
         struct FilesDuplicates *currentData = (struct FilesDuplicates *)current->value;
-        char hash1[33];
-        char hash2[33];
-        hashCalculation(type, currentData->file, hash1);
-        hashCalculation(type, value, hash2);
-        if (hashComparation(hash1, hash2))
+        if (strcmp(currentData->hash, hashCompare) == 0)
         {
             (*parentNode) = currentData;
             return 1; // El valor está en la lista
