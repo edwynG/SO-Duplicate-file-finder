@@ -11,7 +11,8 @@
 
 // Implementación de concurrentFile.h para más detalle vea dicho archivo
 
-sem_t mutex_advance;
+sem_t mutexToVisit;
+sem_t mutexVisited;
 
 struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
 {
@@ -101,7 +102,8 @@ void printFormatFileDuplicates(struct DirectoryData *data)
 
 void initSemFile()
 {
-    sem_init(&mutex_advance, 0, 1);
+    sem_init(&mutexToVisit, 0, 1);
+    sem_init(&mutexVisited, 0, 1);
 }
 
 void *searchFileDuplicates(void *arg)
@@ -111,10 +113,10 @@ void *searchFileDuplicates(void *arg)
     while (1)
     {
         // Espera
-        sem_wait(&mutex_advance);
+        sem_wait(&mutexToVisit);
         if (isEmpty(data->toVisit))
         {
-            sem_post(&mutex_advance); // Libera
+            sem_post(&mutexToVisit); // Libera
             break; // Si la lista está vacía, sale del bucle
         }
 
@@ -125,7 +127,7 @@ void *searchFileDuplicates(void *arg)
         struct stat info;
         if (lstat((char *)toVisitNode->value, &info) == 0)
         {
-
+            
             if (getType(info.st_mode) == 'd')
             { // Si es un directorio
 
@@ -153,7 +155,11 @@ void *searchFileDuplicates(void *arg)
                         dataCategory->file = (char *)toCompareNode->value;
                         dataCategory->duplicates = createList();
 
-                        if (hashComparation(data->funcMode, toVisitNode->value, toCompareNode->value))
+                        char hash1[33];
+                        char hash2[33];
+                        hashCalculation(data->funcMode, toVisitNode->value, hash1);
+                        hashCalculation(data->funcMode, toCompareNode->value, hash2);
+                        if (hashComparation(hash1, hash2))
                         {
                             // Variable para almacenar la categoria o particion del archivo a guardar, si es que existe
                             struct FilesDuplicates *parentCategory = NULL;
@@ -194,13 +200,13 @@ void *searchFileDuplicates(void *arg)
             // Remueve el archivo que se acaba de verificar de "a visitar"
             removeNode(data->toVisit, toVisitNode);
             // Libera
-            sem_post(&mutex_advance);
+            sem_post(&mutexToVisit);
         }
         else
         {
             // Libera
-            sem_post(&mutex_advance); // Libera
-            break; // Si la lista está vacía, sale del bucle
+            sem_post(&mutexToVisit);
+            break; 
         }
     }
     pthread_exit(NULL);
