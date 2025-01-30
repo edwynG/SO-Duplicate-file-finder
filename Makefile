@@ -9,8 +9,8 @@ OBJ = $(SOURCE:$(SRCDIR)/%.c=$(OBJDIR)/%.o) # Aplica un map en SOURCE y crea arc
 MD5LIBRARYDIR = resources/md5-lib/libmd5.a
 MD5EXECUTEDIR = resources/md5-app/md5
 FILE = duplicados
-T = 2
-D = tests
+T = 5
+D = ./
 M = e
 
 all: prepare $(BINDIR)/$(FILE)

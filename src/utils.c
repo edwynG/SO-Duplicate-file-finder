@@ -78,14 +78,21 @@ void directoryTour(char *DirectoryName, struct List *toVisit)
             struct stat info;
             if (lstat(fullPath, &info) == 0)
             {
-                // Si es un enlace simbólico se ignora
-                if (getType(info.st_mode) != 'l')
+                // Genera copia para no sobreescribir atributo value del Node
+                char *fullPathCopy = (char *)malloc(strlen(fullPath) + 1);
+                strcpy(fullPathCopy, fullPath);
+
+                // Si es un archivo de datos no vacío se agrega a "a visitar"
+                if (getType(info.st_mode) == 'f' && info.st_size != 0)
                 {
-                    // Genera copia para no sobreescribir atributo value del Node
-                    char *fullPathCopy = (char *)malloc(strlen(fullPath) + 1);
-                    strcpy(fullPathCopy, fullPath);
                     addNode(toVisit, fullPathCopy);
                 }
+                // Si es un directorio numera los archivos que contiene y guarda registros acerca de ellos en la estructura de datos “a visitar”
+                else if (getType(info.st_mode) == 'd')
+                {
+                    directoryTour(fullPathCopy, toVisit);
+                }
+                // Si es un enlace simbólico se ignora
             }
         }
     }
