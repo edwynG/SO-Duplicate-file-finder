@@ -123,10 +123,27 @@ void *searchFileDuplicates(void *arg)
         // Obtiene el siguiente nodo “a visitar”
         struct Node *toVisitNode = getHead(data->toVisit);
 
+        // Remueve el archivo que se acaba de verificar de "a visitar" (cambia el primero pero no libera el espacio del nodo)
+        data->toVisit->head = toVisitNode->next;
+        if (data->toVisit->head != NULL)
+        {
+            data->toVisit->head->before = NULL;
+        }
+        else
+        {
+            data->toVisit->tail = NULL; // Si la lista queda vacía
+        }
+
+        // Libera
+        sem_post(&mutexToVisit);
+
         // Determina tipo
         struct stat info;
         if (lstat((char *)toVisitNode->value, &info) == 0)
         {
+            // Espera
+            sem_wait(&mutexVisited);
+
             // Estructura que contine la estadistica
             struct FileStatistics *fileStatistics = data->fileStatistics;
 
@@ -184,10 +201,13 @@ void *searchFileDuplicates(void *arg)
             
             // Agrega el archivo que se acaba de verificar a "visitados"
             addNode(data->Visited, toVisitNode->value);
-            // Remueve el archivo que se acaba de verificar de "a visitar"
-            removeNode(data->toVisit, toVisitNode);
+
+            // Libera el espacio del nodo
+            free(toVisitNode);
+
             // Libera
-            sem_post(&mutexToVisit);
+            sem_post(&mutexVisited);
+            
         }
         else
         {
@@ -195,6 +215,7 @@ void *searchFileDuplicates(void *arg)
             sem_post(&mutexToVisit);
             break; 
         }
+        
     }
     pthread_exit(NULL);
 }
