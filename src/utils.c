@@ -104,7 +104,11 @@ int isIncludedCategory(struct List *listCategory, char *value, char type, struct
     while (current != NULL)
     {
         struct FilesDuplicates *currentData = (struct FilesDuplicates *)current->value;
-        if (hashComparation(type, currentData->file, value))
+        char hash1[33];
+        char hash2[33];
+        hashCalculation(type, currentData->file, hash1);
+        hashCalculation(type, value, hash2);
+        if (hashComparation(hash1, hash2))
         {
             (*parentNode) = currentData;
             return 1; // El valor está en la lista

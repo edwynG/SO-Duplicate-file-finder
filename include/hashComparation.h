@@ -8,11 +8,15 @@
 // @return (int)
 int MDFile(char* filename, char hashValue[33]);
 
-// Calcula usando el modo ejecutable/modo libreria el hash de dos archivos y los compara
+// Calcula usando el modo ejecutable/modo libreria el hash de un archivo
 // @param funcMode 'e'/'l'
 // @param file1 nombre del archivo al cual se le calculará el hash md5
-// @param file2 nombre del archivo al cual se le calculará el hash md5 
+void hashCalculation(char funcMode, char *file1, char hash1[]);
+
+// Compara el hash de dos archivos
+// @param hash1 del primer archivo
+// @param hash2 del segundo archivo
 // @return (int) 1 si son iguales 0 de lo contrario
-int hashComparation(char funcMode, char* file1, char* file2);
+int hashComparation(char hash1[], char hash2[]);
 
 #endif
