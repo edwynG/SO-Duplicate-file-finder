@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/dataStructures.h"
 
 // Implementación de dataStructures.h para más detalle vea dicho archivo
@@ -105,4 +106,12 @@ struct List *createList()
     list->head = NULL;
     list->tail = NULL;
     return list;
+};
+
+void setHashNode(struct Node* node, char* hash){
+    if(node == NULL || hash == NULL){
+        return;
+    }
+    node->hash = (char *)malloc(strlen(hash) + 1);
+     strcpy(node->hash, hash);
 };

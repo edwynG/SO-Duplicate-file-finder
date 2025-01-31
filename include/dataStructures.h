@@ -5,6 +5,7 @@
 // Nodo generico
 struct Node
 {
+    char* hash; // identificador para grupos 
     void* value;
     struct Node* next;
     struct Node* before;
@@ -42,6 +43,8 @@ struct Node* getTail(struct List* list);
 // Añade elementos a la lista
 int addNode(struct List* list, void* value);
 
+//Configura hash del nodo
+void setHashNode(struct Node* node, char* hash);
 
 // Crea instancias de la estructura List
 // @return (List*)

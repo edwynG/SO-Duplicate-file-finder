@@ -3,11 +3,12 @@
 #include <semaphore.h>
 #include <pthread.h>
 #include <sys/stat.h>
-#include "../include/hashComparation.h"
 #include "../include/concurrentFile.h"
 #include "../include/dataStructures.h"
 #include "../include/utils.h"
 #include <string.h>
+#include "../include/hashComparation.h"
+
 
 // Implementación de concurrentFile.h para más detalle vea dicho archivo
 
@@ -32,6 +33,7 @@ struct DirectoryData *initStructDirectoryData(char funcMode, char *initDir)
     directoryData->funcMode = funcMode;
     directoryData->toVisit = createList(); // List (char*)
     addNode(directoryData->toVisit, initDir);
+    setHashNode(directoryData->toVisit->tail, "init");
     directoryData->Visited = createList(); // List (char*)
     directoryData->fileStatistics = (struct FileStatistics *)malloc(sizeof(struct FileStatistics));
     directoryData->fileStatistics->numberDuplicates = 0; // Numero de duplicados
@@ -138,13 +140,14 @@ void *searchFileDuplicates(void *arg)
 
         // Libera
         sem_post(&mutexToVisit);
-
+             
         // Determina tipo
         struct stat info;
         if (lstat((char *)toVisitNode->value, &info) == 0)
         {
             // Espera
             sem_wait(&mutexVisited);
+              
 
             // Estructura que contine la estadistica
             struct FileStatistics *fileStatistics = data->fileStatistics;
@@ -153,30 +156,26 @@ void *searchFileDuplicates(void *arg)
             struct List *categoryList = fileStatistics->Files;
 
             // Comprueba la igualdad contra los hashes de todos los archivos en la estructura de datos "visitados"
+           
             struct Node *toCompareNode = getHead(data->Visited);
-
+         
             while (toCompareNode != NULL)
             {
-
-                char hash1[33];
-                char hash2[33];
-                hashCalculation(data->funcMode, toVisitNode->value, hash1);
-                hashCalculation(data->funcMode, toCompareNode->value, hash2);
-
+                 
                 // Se crea una categoria o partición del nodo visitado
                 struct FilesDuplicates *dataCategory = (struct FilesDuplicates *)malloc(sizeof(struct FilesDuplicates));
-                dataCategory->hash = (char *)malloc(strlen(hash2) + 1);
-                strcpy(dataCategory->hash, hash2);
+                dataCategory->hash = (char *)malloc(strlen(toCompareNode->hash) + 1);
+                strcpy(dataCategory->hash, toCompareNode->hash);
                 dataCategory->file = (char *)toCompareNode->value;
                 dataCategory->duplicates = createList();
-                
-                if (hashComparation(hash1, hash2))
+
+                if (hashComparation(toVisitNode->hash, toCompareNode->hash))
                 {
                     // Variable para almacenar la categoria o particion del archivo a guardar, si es que existe
                     struct FilesDuplicates *parentCategory = NULL;
 
                     // Verifica si el archivo pertenece a alguna de las categorias
-                    if (isIncludedCategory(categoryList, hash1, &parentCategory))
+                    if (isIncludedCategory(categoryList, toVisitNode->hash, &parentCategory))
                     {
                         // Agrega el nodo 'a visitar' a su categoria correspondiente
                         addNode(parentCategory->duplicates, (char *)toVisitNode->value);
@@ -204,12 +203,13 @@ void *searchFileDuplicates(void *arg)
                 }
                 toCompareNode = toCompareNode->next;
             }
-            
             // Agrega el archivo que se acaba de verificar a "visitados"
             addNode(data->Visited, toVisitNode->value);
-
+            setHashNode(data->Visited->tail,toVisitNode->hash);
             // Libera el espacio del nodo
+
             free(toVisitNode);
+
 
             // Libera
             sem_post(&mutexVisited);

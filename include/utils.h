@@ -16,7 +16,7 @@ char getType(unsigned int mode);
 // Agrega a una lista todas los archivos y carpetas de un directorio
 // @param DirectoryName ruta del directorio
 // @param toVisit lista a usar
-void directoryTour(char *DirectoryName, struct List *toVisit);
+void directoryTour(char *DirectoryName, struct List *toVisit, char funcMode);
 
 // Verifica si un archivo pertence a una categoría o partición. Si pertenece, indica la categoria mediante un parametro por referencia
 // @param list Un puntero a la estructura List

@@ -6,7 +6,6 @@
 #include "../include/utils.h"
 #include "../include/dataStructures.h"
 #include "../include/hashComparation.h"
-
 // Implementación de utils.h para más detalle vea dicho archivo
 
 char *getFileName(char *path)
@@ -51,7 +50,7 @@ char getType(unsigned int mode)
     }
 }
 
-void directoryTour(char *DirectoryName, struct List *toVisit)
+void directoryTour(char *DirectoryName, struct List *toVisit, char funcMode)
 {
     if (strcmp(DirectoryName, ".") == 0 || strcmp(DirectoryName, "..") == 0)
     {
@@ -86,11 +85,15 @@ void directoryTour(char *DirectoryName, struct List *toVisit)
                 if (getType(info.st_mode) == 'f' && info.st_size != 0)
                 {
                     addNode(toVisit, fullPathCopy);
+                    char hash1[33];
+                    hashCalculation(funcMode, fullPathCopy, hash1);
+                    setHashNode(toVisit->tail, hash1);
+                    
                 }
                 // Si es un directorio numera los archivos que contiene y guarda registros acerca de ellos en la estructura de datos “a visitar”
                 else if (getType(info.st_mode) == 'd')
                 {
-                    directoryTour(fullPathCopy, toVisit);
+                    directoryTour(fullPathCopy, toVisit, funcMode);
                 }
                 // Si es un enlace simbólico se ignora
             }
