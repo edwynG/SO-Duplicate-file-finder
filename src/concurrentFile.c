@@ -113,11 +113,12 @@ void initSemFile()
 void *searchFileDuplicates(void *arg)
 {
     struct DirectoryData *data = (struct DirectoryData *)arg;
-    // Mientras que "a visitar" no este vacía
+    
     while (1)
     {
         // Espera
         sem_wait(&mutexToVisit);
+        // Mientras que "a visitar" no este vacía
         if (isEmpty(data->toVisit))
         {
             sem_post(&mutexToVisit); // Libera
@@ -147,7 +148,6 @@ void *searchFileDuplicates(void *arg)
         {
             // Espera
             sem_wait(&mutexVisited);
-              
 
             // Estructura que contine la estadistica
             struct FileStatistics *fileStatistics = data->fileStatistics;
@@ -206,10 +206,9 @@ void *searchFileDuplicates(void *arg)
             // Agrega el archivo que se acaba de verificar a "visitados"
             addNode(data->Visited, toVisitNode->value);
             setHashNode(data->Visited->tail,toVisitNode->hash);
+
             // Libera el espacio del nodo
-
             free(toVisitNode);
-
 
             // Libera
             sem_post(&mutexVisited);

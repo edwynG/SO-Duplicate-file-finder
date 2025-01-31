@@ -10,7 +10,7 @@ MD5LIBRARYDIR = resources/md5-lib/libmd5.a
 MD5EXECUTEDIR = resources/md5-app/md5
 FILE = duplicados
 T = 5
-D = ./
+D = tests
 M = e
 
 all: prepare $(BINDIR)/$(FILE)
